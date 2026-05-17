@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Admin - Auto Berlin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav id="navbar" style="background: var(--dark); padding: 1rem 0;">
+    <div class="container nav-inner" style="justify-content: center;">
+      <a href="index.html" class="nav-logo">
+        <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 50px; width: auto;">
+      </a>
+    </div>
+  </nav>
+
+  <!-- ADMIN AUTH -->
+  <section id="adminLogin" class="admin-section">
+    <div class="login-box">
+      <h2>Panel de Control</h2>
+      <p>Ingresa la contraseña para gestionar el inventario.</p>
+      <input type="password" id="adminPass" placeholder="Contraseña..." class="search-input" style="width: 100%; margin-bottom: 1rem;">
+      <button class="btn-primary" style="width: 100%;" onclick="login()">Ingresar</button>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminDashboard" class="admin-section" style="display: none;">
+    <div class="container">
+      <div class="admin-header">
+        <div>
+          <h2>Gestión de Vehículos</h2>
+          <p>Base de datos local activa.</p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn-outline" onclick="openVehicleModal()">+ Nuevo Vehículo</button>
+          <button class="btn-primary" onclick="saveDatabase()" id="btnSaveDb">💾 Guardar Cambios</button>
+        </div>
+      </div>
+
+      <div class="filters-bar" style="margin-bottom: 2rem;">
+        <input type="text" class="search-input" id="adminSearch" placeholder="🔍 Buscar vehículo...">
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Vehículo</th>
+              <th>Año</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody">
+            <!-- Vehículos cargados aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL EDIT/ADD VEHICLE -->
+  <div class="modal-overlay" id="editModalOverlay">
+    <div class="modal-box" id="editModalBox" style="max-width: 800px; padding: 2rem; border-radius: 12px; background: var(--dark); border: 1px solid rgba(255,255,255,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 id="editModalTitle">Nuevo Vehículo</h2>
+        <button class="modal-close" id="editModalClose" style="position: static; color: white;">✕</button>
+      </div>
+
+      <form id="vehicleForm">
+        <input type="hidden" id="v_id">
+        <div class="form-row">
+          <div class="form-group"><label>Marca</label><input type="text" id="v_brand" required></div>
+          <div class="form-group"><label>Modelo</label><input type="text" id="v_model" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Año</label><input type="number" id="v_year" required></div>
+          <div class="form-group"><label>Kilómetros</label><input type="number" id="v_km" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Precio</label><input type="number" id="v_price" required></div>
+          <div class="form-group"><label>Moneda</label>
+            <select id="v_currency">
+              <option value="USD">USD</option>
+              <option value="ARS">ARS</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Combustible</label><input type="text" id="v_fuel" placeholder="Ej: Nafta, Diesel"></div>
+          <div class="form-group"><label>Transmisión</label><input type="text" id="v_transmission" placeholder="Ej: Automático, Manual"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Color</label><input type="text" id="v_color"></div>
+          <div class="form-group"><label>Motor</label><input type="text" id="v_engine"></div>
+        </div>
+        <div class="form-group"><label>Descripción</label><textarea id="v_desc" rows="3"></textarea></div>
+        
+        <div class="form-row">
+          <div class="form-group"><label>Estado</label>
+            <select id="v_status">
+              <option value="available">Disponible</option>
+              <option value="sold">Vendido</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Etiqueta (Ej: EXCLUSIVO)</label><input type="text" id="v_badge"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Imágenes del Vehículo</label>
+          <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+            <input type="file" id="v_image_upload" multiple accept="image/*" style="display:none">
+            <button type="button" class="btn-outline" onclick="document.getElementById('v_image_upload').click()">📷 Seleccionar Fotos desde la PC...</button>
+            <span id="uploadStatus" style="font-size: 0.85rem; color: var(--gold);"></span>
+          </div>
+          <div id="imagePreviewContainer" style="display:flex; gap:0.5rem; flex-wrap:wrap;"></div>
+          <input type="hidden" id="v_images">
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <button type="button" class="btn-outline" onclick="closeVehicleModal()" style="flex:1; justify-content:center;">Cancelar</button>
+          <button type="submit" class="btn-primary" style="flex:1; justify-content:center;">Guardar Vehículo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
