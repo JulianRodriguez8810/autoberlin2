@@ -6,15 +6,24 @@ let currentVehicleImages = []; // Para manejar las imágenes del modal
 
 // Fake login for demonstration
 function login() {
+  const user = document.getElementById('adminUser').value;
   const pass = document.getElementById('adminPass').value;
-  if (pass === 'AutoBerlin') {
+  if (user === 'admin' && pass === 'AutoBerlin') {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
     loadAdminVehicles();
   } else {
-    alert('Contraseña incorrecta.');
+    alert('Usuario o contraseña incorrectos.');
   }
 }
+
+// Soporte para presionar "Enter" al iniciar sesión
+document.getElementById('adminUser').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') login();
+});
+document.getElementById('adminPass').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') login();
+});
 
 async function loadAdminVehicles() {
   try {
