@@ -307,32 +307,25 @@ document.getElementById('v_image_upload').addEventListener('change', async (e) =
   const files = e.target.files;
   if(!files.length) return;
   
+  // Máximo 5 fotos por vehículo para no superar el límite de Firestore
+  const MAX_PHOTOS = 5;
+  if (currentVehicleImages.length >= MAX_PHOTOS) {
+    alert(`Máximo ${MAX_PHOTOS} fotos por vehículo.`);
+    e.target.value = '';
+    return;
+  }
+
   const status = document.getElementById('uploadStatus');
-  status.textContent = 'Procesando imágenes...';
+  const available = MAX_PHOTOS - currentVehicleImages.length;
+  const toProcess = Array.from(files).slice(0, available);
   
-  for(let i = 0; i < files.length; i++) {
-    const file = files[i];
+  for(let i = 0; i < toProcess.length; i++) {
+    const file = toProcess[i];
     if(!file.type.startsWith('image/')) continue;
+    status.textContent = `Procesando foto ${i+1} de ${toProcess.length}...`;
     try {
       const base64 = await compressImage(file);
-      
-      // Si Firebase Storage está configurado, intentar subir
-      if (typeof storage !== 'undefined' && storage !== null) {
-        try {
-          status.textContent = `Subiendo imagen ${i+1}/${files.length} a Firebase...`;
-          const filename = `vehicles/${Date.now()}_${Math.random().toString(36).substring(2, 7)}.jpg`;
-          const storageRef = storage.ref().child(filename);
-          const snapshot = await storageRef.putString(base64, 'data_url');
-          const downloadURL = await snapshot.ref.getDownloadURL();
-          currentVehicleImages.push(downloadURL);
-        } catch (storageErr) {
-          console.warn("⚠️ Falló la subida a Firebase Storage (puede requerir plan de pago), usando Base64:", storageErr);
-          currentVehicleImages.push(base64); // Fallback a Base64
-        }
-      } else {
-        // Fallback local a Base64
-        currentVehicleImages.push(base64);
-      }
+      currentVehicleImages.push(base64);
     } catch(err) {
       console.error("Error al procesar imagen", err);
     }
@@ -352,12 +345,13 @@ function compressImage(file) {
       img.src = event.target.result;
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 1600; // Mejor resolución
+        // Tamaño reducido para que quepa en Firestore (aprox. 60-100KB por foto en Base64)
+        const MAX_WIDTH = 900;
         let width = img.width;
         let height = img.height;
         
         if (width > MAX_WIDTH) {
-          height *= MAX_WIDTH / width;
+          height = Math.round(height * MAX_WIDTH / width);
           width = MAX_WIDTH;
         }
         
@@ -366,8 +360,8 @@ function compressImage(file) {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
         
-        // Comprimir como JPEG al 92% de calidad para mejor detalle
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        // Calidad 0.65 para lograr buen balance entre calidad visual y tamaño de archivo
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.65);
         resolve(dataUrl);
       };
       img.onerror = (e) => reject(e);
