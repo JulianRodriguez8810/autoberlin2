@@ -4,16 +4,43 @@ let adminVehicles = [];
 let dbFileHandle = null;
 let currentVehicleImages = []; // Para manejar las imágenes del modal
 
-// Fake login for demonstration
-function login() {
+// Login con soporte Firebase Auth y local
+async function login() {
   const user = document.getElementById('adminUser').value;
   const pass = document.getElementById('adminPass').value;
-  if (user === 'admin' && pass === 'AutoBerlin') {
-    document.getElementById('adminLogin').style.display = 'none';
-    document.getElementById('adminDashboard').style.display = 'block';
-    loadAdminVehicles();
+  
+  if (typeof auth !== 'undefined') {
+    try {
+      if (!user.includes('@')) {
+        alert("Por favor, ingresa tu correo electrónico registrado en tu proyecto Firebase.");
+        return;
+      }
+      await auth.signInWithEmailAndPassword(user, pass);
+    } catch (e) {
+      console.error("Error al iniciar sesión en Firebase:", e);
+      alert("Error al iniciar sesión: " + e.message);
+    }
   } else {
-    alert('Usuario o contraseña incorrectos.');
+    // Fallback local
+    if (user === 'admin' && pass === 'AutoBerlin') {
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      loadAdminVehicles();
+    } else {
+      alert('Usuario o contraseña incorrectos.');
+    }
+  }
+}
+
+function logout() {
+  if (typeof auth !== 'undefined') {
+    auth.signOut().then(() => {
+      alert("Sesión cerrada correctamente.");
+    }).catch(error => {
+      console.error("Error al cerrar sesión:", error);
+    });
+  } else {
+    window.location.reload();
   }
 }
 
@@ -25,7 +52,43 @@ document.getElementById('adminPass').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') login();
 });
 
+// Listener del estado de autenticación en Firebase
+if (typeof auth !== 'undefined') {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById('adminLogin').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+      const emailEl = document.getElementById('adminUserEmail');
+      if (emailEl) emailEl.textContent = `Sesión iniciada como: ${user.email}`;
+      loadAdminVehicles();
+    } else {
+      document.getElementById('adminLogin').style.display = 'block';
+      document.getElementById('adminDashboard').style.display = 'none';
+    }
+  });
+}
+
 async function loadAdminVehicles() {
+  if (typeof db !== 'undefined') {
+    try {
+      const snapshot = await db.collection('vehicles').get();
+      adminVehicles = [];
+      snapshot.forEach(doc => {
+        adminVehicles.push(doc.data());
+      });
+      // Ordenar por ID descendente
+      adminVehicles.sort((a, b) => b.id - a.id);
+    } catch (e) {
+      console.error("Error cargando de Firestore, intentando local:", e);
+      await loadAdminVehiclesFallback();
+    }
+  } else {
+    await loadAdminVehiclesFallback();
+  }
+  renderAdminTable(adminVehicles);
+}
+
+async function loadAdminVehiclesFallback() {
   try {
     const res = await fetch('data/vehicles.json');
     if (res.ok) {
@@ -36,7 +99,6 @@ async function loadAdminVehicles() {
     console.error("No se pudo cargar vehicles.json, usando array vacío.", e);
     adminVehicles = [];
   }
-  renderAdminTable(adminVehicles);
 }
 
 function renderAdminTable(list) {
@@ -133,7 +195,7 @@ document.getElementById('vehicleForm').addEventListener('submit', (e) => {
   
   const idStr = document.getElementById('v_id').value;
   const isEdit = !!idStr;
-  const id = isEdit ? parseInt(idStr) : Date.now(); // Generate ID for new
+  const id = isEdit ? parseInt(idStr) : Date.now(); // Generar ID para nuevo
 
   const images = currentVehicleImages; // Usar el array que ya gestionamos con las fotos subidas
 
@@ -155,20 +217,43 @@ document.getElementById('vehicleForm').addEventListener('submit', (e) => {
     images: images
   };
 
-  if (isEdit) {
-    const index = adminVehicles.findIndex(x => x.id === id);
-    if(index !== -1) adminVehicles[index] = vehicleData;
+  if (typeof db !== 'undefined') {
+    // Guardar directamente en Firestore
+    db.collection('vehicles').doc(id.toString()).set(vehicleData)
+      .then(() => {
+        console.log("Vehículo guardado en Firebase Firestore con éxito.");
+        if (isEdit) {
+          const index = adminVehicles.findIndex(x => x.id === id);
+          if(index !== -1) adminVehicles[index] = vehicleData;
+        } else {
+          adminVehicles.unshift(vehicleData);
+        }
+        renderAdminTable(adminVehicles);
+        closeVehicleModal();
+      })
+      .catch(error => {
+        console.error("Error al guardar en Firestore:", error);
+        alert("Error al guardar en Firebase: " + error.message);
+      });
   } else {
-    adminVehicles.unshift(vehicleData); // Add to beginning
-  }
+    // Fallback local en memoria
+    if (isEdit) {
+      const index = adminVehicles.findIndex(x => x.id === id);
+      if(index !== -1) adminVehicles[index] = vehicleData;
+    } else {
+      adminVehicles.unshift(vehicleData); // Agregar al principio
+    }
 
-  renderAdminTable(adminVehicles);
-  closeVehicleModal();
-  
-  // Highlight save button
-  const btnSave = document.getElementById('btnSaveDb');
-  btnSave.style.background = '#ff4444';
-  btnSave.innerText = '⚠️ Cambios sin guardar';
+    renderAdminTable(adminVehicles);
+    closeVehicleModal();
+    
+    // Resaltar botón de guardar base de datos
+    const btnSave = document.getElementById('btnSaveDb');
+    if (btnSave) {
+      btnSave.style.background = '#ff4444';
+      btnSave.innerText = '⚠️ Cambios sin guardar';
+    }
+  }
 });
 
 function editVehicle(id) {
@@ -225,13 +310,31 @@ document.getElementById('v_image_upload').addEventListener('change', async (e) =
   const status = document.getElementById('uploadStatus');
   status.textContent = 'Procesando imágenes...';
   
-  for(let file of files) {
+  for(let i = 0; i < files.length; i++) {
+    const file = files[i];
     if(!file.type.startsWith('image/')) continue;
     try {
       const base64 = await compressImage(file);
-      currentVehicleImages.push(base64);
+      
+      // Si Firebase Storage está configurado, intentar subir
+      if (typeof storage !== 'undefined' && storage !== null) {
+        try {
+          status.textContent = `Subiendo imagen ${i+1}/${files.length} a Firebase...`;
+          const filename = `vehicles/${Date.now()}_${Math.random().toString(36).substring(2, 7)}.jpg`;
+          const storageRef = storage.ref().child(filename);
+          const snapshot = await storageRef.putString(base64, 'data_url');
+          const downloadURL = await snapshot.ref.getDownloadURL();
+          currentVehicleImages.push(downloadURL);
+        } catch (storageErr) {
+          console.warn("⚠️ Falló la subida a Firebase Storage (puede requerir plan de pago), usando Base64:", storageErr);
+          currentVehicleImages.push(base64); // Fallback a Base64
+        }
+      } else {
+        // Fallback local a Base64
+        currentVehicleImages.push(base64);
+      }
     } catch(err) {
-      console.error("Error comprimiendo imagen", err);
+      console.error("Error al procesar imagen", err);
     }
   }
   
@@ -275,12 +378,28 @@ function compressImage(file) {
 
 function deleteVehicle(id) {
   if (confirm("¿Estás seguro de que deseas eliminar este vehículo? Esta acción no se puede deshacer.")) {
-    adminVehicles = adminVehicles.filter(v => v.id !== id);
-    renderAdminTable(adminVehicles);
-    
-    const btnSave = document.getElementById('btnSaveDb');
-    btnSave.style.background = '#ff4444';
-    btnSave.innerText = '⚠️ Cambios sin guardar';
+    if (typeof db !== 'undefined') {
+      db.collection('vehicles').doc(id.toString()).delete()
+        .then(() => {
+          console.log("Vehículo eliminado de Firestore con éxito.");
+          adminVehicles = adminVehicles.filter(v => v.id !== id);
+          renderAdminTable(adminVehicles);
+        })
+        .catch(error => {
+          console.error("Error al eliminar de Firestore:", error);
+          alert("Error al eliminar de Firebase: " + error.message);
+        });
+    } else {
+      // Modo local
+      adminVehicles = adminVehicles.filter(v => v.id !== id);
+      renderAdminTable(adminVehicles);
+      
+      const btnSave = document.getElementById('btnSaveDb');
+      if (btnSave) {
+        btnSave.style.background = '#ff4444';
+        btnSave.innerText = '⚠️ Cambios sin guardar';
+      }
+    }
   }
 }
 
@@ -347,3 +466,51 @@ document.getElementById('editModalOverlay').addEventListener('click', e => {
   if (e.target === document.getElementById('editModalOverlay')) closeVehicleModal();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVehicleModal(); });
+
+// Función para migrar datos locales (del JSON) a Firestore
+async function migrateLocalDataToFirebase() {
+  if (typeof db === 'undefined') {
+    alert("Firebase no está inicializado. Configura primero js/firebase-config.js.");
+    return;
+  }
+  
+  if (!confirm(`¿Estás seguro de que deseas importar los ${adminVehicles.length} vehículos locales actuales a la base de datos de Firebase Firestore? Esto podría sobrescribir vehículos con el mismo ID.`)) {
+    return;
+  }
+  
+  const btn = document.getElementById('btnMigrate');
+  const originalText = btn.innerText;
+  btn.disabled = true;
+  btn.innerText = "⏳ Migrando...";
+  
+  try {
+    let count = 0;
+    const batch = db.batch();
+    
+    // El límite de operaciones en un batch de Firestore es 500
+    for (let vehicle of adminVehicles) {
+      const docRef = db.collection('vehicles').doc(vehicle.id.toString());
+      batch.set(docRef, vehicle);
+      count++;
+      
+      // Si llegamos a 400 (por las dudas), commiteamos y abrimos otro batch
+      if (count % 400 === 0) {
+        await batch.commit();
+      }
+    }
+    
+    // Commit final para los documentos restantes
+    if (count % 400 !== 0) {
+      await batch.commit();
+    }
+    
+    alert(`🎉 ¡Migración exitosa! Se importaron ${count} vehículos a Firebase Firestore.`);
+    loadAdminVehicles(); // Recargar la tabla desde Firestore
+  } catch (error) {
+    console.error("Error durante la migración:", error);
+    alert("Hubo un error al migrar los datos: " + error.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = originalText;
+  }
+}

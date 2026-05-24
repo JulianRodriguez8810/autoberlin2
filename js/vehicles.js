@@ -104,7 +104,28 @@ let allVehicles = [];
 window._slideIndex = 0;
 
 async function loadVehicles() {
-  // Intentar cargar desde JSON externo (servidor); si falla, usar datos embebidos
+  // Intentar cargar desde Firebase Firestore si está disponible
+  if (typeof db !== 'undefined') {
+    try {
+      const snapshot = await db.collection('vehicles').get();
+      if (!snapshot.empty) {
+        allVehicles = [];
+        snapshot.forEach(doc => {
+          allVehicles.push(doc.data());
+        });
+        // Ordenar por ID descendente (los más nuevos primero)
+        allVehicles.sort((a, b) => b.id - a.id);
+        console.log("🚘 Cargado desde Firebase Firestore:", allVehicles.length, "vehículos.");
+        populateBrandFilter();
+        renderVehicles(allVehicles);
+        return;
+      }
+    } catch (e) {
+      console.error("⚠️ Error cargando desde Firestore, intentando local:", e);
+    }
+  }
+
+  // Fallback local
   try {
     const res = await fetch('data/vehicles.json');
     if (res.ok) {
