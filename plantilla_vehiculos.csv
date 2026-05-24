@@ -1,6 +1,0 @@
-id,brand,model,year,km,price,currency,fuel,transmission,color,engine,description,status,featured,badge,images
-1,BMW,M3 Competition,2023,12000,95000,USD,Nafta,Automático,Azul Portimao,3.0L Biturbo 510cv,"Referente absoluto del segmento deportivo. Motor biturbo de 510cv.",available,true,EXCLUSIVO,"https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&q=80|https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=1200&q=80"
-2,Mercedes-Benz,AMG GT 63 S,2022,8500,145000,USD,Nafta,Automático,Negro Obsidiana,4.0L Biturbo V8 630cv,"La expresión máxima del GT de alto rendimiento.",available,true,PREMIUM,"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1200&q=80|https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=80"
-,,, , , , , , , , , , , , , 
-,,, , , , , , , , , , , , , 
-,,, , , , , , , , , , , , , 

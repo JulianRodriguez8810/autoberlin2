@@ -36,11 +36,13 @@
       <div class="admin-header">
         <div>
           <h2>Gestión de Vehículos</h2>
-          <p>Base de datos local activa.</p>
+          <p id="adminUserEmail" style="color: var(--gold); font-size: 0.85rem;"></p>
         </div>
-        <div class="admin-actions">
-          <button class="btn-outline" onclick="openVehicleModal()">+ Nuevo Vehículo</button>
-          <button class="btn-primary" onclick="saveDatabase()" id="btnSaveDb">💾 Guardar Cambios</button>
+        <div class="admin-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+          <button class="btn-outline" onclick="openVehicleModal()" style="display: flex; align-items: center; gap: 0.4rem;">
+            <span style="font-size: 1.2rem;">+</span> Nuevo Vehículo
+          </button>
+          <button class="btn-outline" onclick="logout()" id="btnLogout" style="border-color: #ff4444; color: #ff4444;">🚪 Cerrar Sesión</button>
         </div>
       </div>
 
@@ -134,6 +136,13 @@
     </div>
   </div>
 
+  <!-- Firebase SDKs (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <!-- Firebase Config -->
+  <script src="js/firebase-config.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>
