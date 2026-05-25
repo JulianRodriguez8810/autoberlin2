@@ -269,6 +269,48 @@ function renderImagePreviews() {
     wrap.style.position = 'relative';
     wrap.style.width = '100px';
     wrap.style.height = '75px';
+    wrap.style.cursor = 'grab';
+    wrap.setAttribute('draggable', 'true');
+    wrap.dataset.index = index;
+    
+    // Eventos de arrastrar y soltar (Drag and Drop)
+    wrap.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', index);
+      wrap.style.opacity = '0.5';
+    });
+    
+    wrap.addEventListener('dragend', () => {
+      wrap.style.opacity = '1';
+    });
+    
+    wrap.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+    
+    wrap.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      wrap.style.border = '2px dashed var(--gold)';
+      wrap.style.borderRadius = '6px';
+    });
+    
+    wrap.addEventListener('dragleave', () => {
+      wrap.style.border = 'none';
+    });
+    
+    wrap.addEventListener('drop', (e) => {
+      e.preventDefault();
+      wrap.style.border = 'none';
+      const draggedIndex = parseInt(e.dataTransfer.getData('text/plain'));
+      const targetIndex = index;
+      
+      if (draggedIndex !== targetIndex) {
+        const draggedItem = currentVehicleImages[draggedIndex];
+        currentVehicleImages.splice(draggedIndex, 1);
+        currentVehicleImages.splice(targetIndex, 0, draggedItem);
+        document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
+        renderImagePreviews();
+      }
+    });
     
     const img = document.createElement('img');
     img.src = src;
@@ -291,11 +333,33 @@ function renderImagePreviews() {
     btnDel.style.height = '20px';
     btnDel.style.cursor = 'pointer';
     btnDel.style.fontSize = '10px';
+    btnDel.style.zIndex = '10';
     btnDel.onclick = (e) => {
       e.preventDefault();
+      e.stopPropagation();
       currentVehicleImages.splice(index, 1);
+      document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
       renderImagePreviews();
     };
+    
+    if (index === 0) {
+      const coverBadge = document.createElement('span');
+      coverBadge.textContent = 'Portada';
+      coverBadge.style.position = 'absolute';
+      coverBadge.style.bottom = '2px';
+      coverBadge.style.left = '2px';
+      coverBadge.style.background = 'rgba(0, 0, 0, 0.7)';
+      coverBadge.style.color = 'var(--gold)';
+      coverBadge.style.fontSize = '8px';
+      coverBadge.style.padding = '2px 4px';
+      coverBadge.style.borderRadius = '3px';
+      coverBadge.style.fontWeight = 'bold';
+      coverBadge.style.border = '1px solid var(--gold)';
+      wrap.appendChild(coverBadge);
+      
+      img.style.borderColor = 'var(--gold)';
+      img.style.borderWidth = '2px';
+    }
     
     wrap.appendChild(img);
     wrap.appendChild(btnDel);
@@ -330,8 +394,8 @@ document.getElementById('v_image_upload').addEventListener('change', async (e) =
   const files = e.target.files;
   if(!files.length) return;
   
-  // Máximo 5 fotos por vehículo para no superar el límite de Firestore
-  const MAX_PHOTOS = 5;
+  // Máximo 10 fotos por vehículo para no superar el límite de Firestore
+  const MAX_PHOTOS = 10;
   if (currentVehicleImages.length >= MAX_PHOTOS) {
     alert(`Máximo ${MAX_PHOTOS} fotos por vehículo.`);
     e.target.value = '';
