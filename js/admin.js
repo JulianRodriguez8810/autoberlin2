@@ -264,6 +264,10 @@ function editVehicle(id) {
 function renderImagePreviews() {
   const container = document.getElementById('imagePreviewContainer');
   container.innerHTML = '';
+  
+  let touchStartX = 0;
+  let touchStartY = 0;
+
   currentVehicleImages.forEach((src, index) => {
     const wrap = document.createElement('div');
     wrap.style.position = 'relative';
@@ -272,8 +276,11 @@ function renderImagePreviews() {
     wrap.style.cursor = 'grab';
     wrap.setAttribute('draggable', 'true');
     wrap.dataset.index = index;
+    wrap.style.webkitTouchCallout = 'none';
+    wrap.style.webkitUserSelect = 'none';
+    wrap.style.userSelect = 'none';
     
-    // Eventos de arrastrar y soltar (Drag and Drop)
+    // Eventos de arrastrar y soltar de mouse (Drag and Drop para PC)
     wrap.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('text/plain', index);
       wrap.style.opacity = '0.5';
@@ -311,6 +318,39 @@ function renderImagePreviews() {
         renderImagePreviews();
       }
     });
+
+    // Eventos de tocar y arrastrar para pantallas táctiles (Móviles)
+    wrap.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      wrap.style.opacity = '0.7';
+    }, { passive: true });
+
+    wrap.addEventListener('touchmove', (e) => {
+      // Bloquea el scroll del navegador mientras se arrastra en la galería
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+
+    wrap.addEventListener('touchend', (e) => {
+      wrap.style.opacity = '1';
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      
+      const dropTarget = document.elementFromPoint(touchEndX, touchEndY);
+      if (dropTarget) {
+        const targetWrap = dropTarget.closest('[draggable="true"]');
+        if (targetWrap && targetWrap !== wrap) {
+          const targetIndex = parseInt(targetWrap.dataset.index);
+          const draggedIndex = index;
+          
+          const draggedItem = currentVehicleImages[draggedIndex];
+          currentVehicleImages.splice(draggedIndex, 1);
+          currentVehicleImages.splice(targetIndex, 0, draggedItem);
+          document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
+          renderImagePreviews();
+        }
+      }
+    });
     
     const img = document.createElement('img');
     img.src = src;
@@ -319,6 +359,7 @@ function renderImagePreviews() {
     img.style.objectFit = 'cover';
     img.style.borderRadius = '6px';
     img.style.border = '1px solid rgba(255,255,255,0.2)';
+    img.style.pointerEvents = 'none'; // Evita el menú popup de descarga en móvil
     
     const btnDel = document.createElement('button');
     btnDel.innerHTML = '✕';
@@ -334,6 +375,7 @@ function renderImagePreviews() {
     btnDel.style.cursor = 'pointer';
     btnDel.style.fontSize = '10px';
     btnDel.style.zIndex = '10';
+    btnDel.style.pointerEvents = 'auto';
     btnDel.onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -341,6 +383,36 @@ function renderImagePreviews() {
       document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
       renderImagePreviews();
     };
+
+    // Botón de Estrella para hacer portada con un solo toque (Ideal para Móvil)
+    if (index !== 0) {
+      const btnStar = document.createElement('button');
+      btnStar.innerHTML = '⭐';
+      btnStar.style.position = 'absolute';
+      btnStar.style.top = '-5px';
+      btnStar.style.left = '-5px';
+      btnStar.style.background = 'rgba(0, 0, 0, 0.85)';
+      btnStar.style.color = '#ffcc00';
+      btnStar.style.border = '1px solid #ffcc00';
+      btnStar.style.borderRadius = '50%';
+      btnStar.style.width = '20px';
+      btnStar.style.height = '20px';
+      btnStar.style.cursor = 'pointer';
+      btnStar.style.fontSize = '10px';
+      btnStar.style.zIndex = '10';
+      btnStar.style.pointerEvents = 'auto';
+      btnStar.title = 'Hacer Portada';
+      btnStar.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const itemToMakeCover = currentVehicleImages[index];
+        currentVehicleImages.splice(index, 1);
+        currentVehicleImages.unshift(itemToMakeCover);
+        document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
+        renderImagePreviews();
+      };
+      wrap.appendChild(btnStar);
+    }
     
     if (index === 0) {
       const coverBadge = document.createElement('span');
@@ -359,6 +431,7 @@ function renderImagePreviews() {
       
       img.style.borderColor = 'var(--gold)';
       img.style.borderWidth = '2px';
+      img.style.borderStyle = 'solid';
     }
     
     wrap.appendChild(img);
