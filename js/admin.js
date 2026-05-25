@@ -340,11 +340,19 @@ document.getElementById('v_image_upload').addEventListener('change', async (e) =
 
   const status = document.getElementById('uploadStatus');
   const available = MAX_PHOTOS - currentVehicleImages.length;
+  
+  if (files.length > available) {
+    alert(`Solo puedes agregar ${available} foto(s) más. Se procesará(n) solo la(s) primera(s) ${available}.`);
+  }
+  
   const toProcess = Array.from(files).slice(0, available);
   
   for(let i = 0; i < toProcess.length; i++) {
     const file = toProcess[i];
-    if(!file.type.startsWith('image/')) continue;
+    if(!file.type.startsWith('image/')) {
+      alert(`El archivo "${file.name}" no es una imagen válida o no tiene una extensión correcta (.jpg, .png, etc.).`);
+      continue;
+    }
     status.textContent = `Subiendo foto ${i+1} de ${toProcess.length} a Cloudinary...`;
     try {
       const url = await uploadToCloudinary(file);
