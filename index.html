@@ -8,6 +8,206 @@
   <meta name="description"
     content="Auto Berlin, la concesionaria de autos de alta gama más exclusiva de Canning y zona sur. Ferrari, Porsche, BMW, Mercedes, Lamborghini y más.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animated-gradient.css">
+  <link rel="stylesheet" href="css/services-premium.css">
+  <style>
+    /* ── NAVBAR: más compacto ── */
+    #navbar {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0.4rem 0 !important;
+    }
+
+    /* ── HERO: Modern Asymmetric ── */
+    #hero {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--dark, #050505);
+    }
+
+    #hero .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 650px;
+      margin-left: 5%;
+      padding-top: 130px; /* Aumentado para evitar que el navbar lo tape */
+    }
+    
+    .hero-bg-video {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 65%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      mask-image: linear-gradient(to left, black 50%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to left, black 50%, transparent 100%);
+    }
+
+    /* ── RESPONSIVE HERO ── */
+    @media(max-width: 768px) {
+      .hero-bg-video {
+        width: 100%;
+        mask-image: linear-gradient(to top, black 30%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%);
+        opacity: 0.6;
+      }
+      #hero .hero-content {
+        margin-left: 0;
+        padding-top: 120px;
+        text-align: center;
+        width: 100%;
+      }
+      #hero .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #hero .hero-btns {
+        justify-content: center;
+      }
+      /* Solucionar solapamiento de stats en movil */
+      .hero-stats {
+        position: relative !important;
+        margin-top: 3rem;
+        background: transparent !important;
+        border-top: none !important;
+      }
+    }
+
+    /* ── CINTA DE MARCAS: UNA SOLA LÍNEA ── */
+    #brands {
+      background: var(--dark);
+      padding: 2.5rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* El container recorta lo que sale por los lados */
+    #brands .brands-wrapper {
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+    }
+
+    /* Fade lateral */
+    #brands .brands-wrapper::before,
+    #brands .brands-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 120px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    #brands .brands-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--dark), transparent);
+    }
+    #brands .brands-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--dark), transparent);
+    }
+
+    /* Track: fila única, sin wrap, anima de derecha a izquierda */
+    .brands-track {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      gap: 3.5rem;
+      width: max-content;
+      animation: slideMarks 35s linear infinite;
+      padding: 0.5rem 0;
+    }
+
+    .brand-item {
+      font-size: 1.15rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .brand-item:hover {
+      color: var(--gold, #DAA520);
+      transform: translateY(-2px);
+      text-shadow: 0 0 12px rgba(218, 165, 32, 0.45);
+    }
+
+    @keyframes slideMarks {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* EFECTO HERO OVERLAY */
+    .hero-gradient-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 80% 50%, transparent 40%, rgba(5, 5, 5, 0.8) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    
+    .hero-title {
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .hero-eyebrow {
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold, #DAA520);
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    /* EFECTO HOVER EN GALERÍA DE VEHÍCULOS */
+    .vehicle-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .vehicle-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(218, 165, 32, 0.2);
+    }
+
+    .vehicle-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    .vehicle-card:hover .vehicle-image {
+      transform: scale(1.08);
+    }
+
+    .vehicle-card-content {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </head>
 
 <body>
@@ -18,54 +218,57 @@
       <a href="#" class="nav-logo">
         <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 50px; width: auto;">
       </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#nosotros">Nosotros</a></li>
-        <li><a href="#servicios">Servicios</a></li>
-        <li><a href="#catalogo">Catálogo</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li><a href="https://wa.me/5491100000000" target="_blank" class="nav-cta">WhatsApp</a></li>
-      </ul>
-      <div class="nav-toggle" id="navToggle" aria-label="Menú">
-        <span></span><span></span><span></span>
+      <!-- Menu desplegable derecho -->
+      <div class="nav-menu-wrap" id="navMenuWrap">
+        <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-menu-panel" id="navMenuPanel">
+          <a href="#nosotros">Nosotros</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#catalogo">Catálogo</a>
+          <a href="#contacto">Contacto</a>
+          <a href="https://wa.me/5491100000000" target="_blank" class="nav-menu-wa">WhatsApp ➔</a>
+        </div>
       </div>
     </div>
   </nav>
 
   <!-- HERO -->
   <section id="hero">
-    <div class="hero-bg">
-      <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=90"
-        alt="Auto Berlin — Vehículos de Alta Gama">
+    <!-- Animación nativa de fondo (GSAP) -->
+    <div class="hero-bg-anim">
+      <div id="hero-glow" class="hero-glow"></div>
+      <img id="hero-car" class="hero-car" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1400&q=90" alt="">
     </div>
+    <div class="hero-gradient-overlay"></div>
+    
     <div class="container">
-      <div class="hero-content">
-        <div class="hero-eyebrow">Zona Sur · Canning</div>
-        <h1 class="hero-title">La experiencia<br>de conducir lo<br><span class="gold">extraordinario</span></h1>
-        <p class="hero-desc">Vehículos de alta gama seleccionados para quienes exigen lo mejor. Atención personalizada,
-          financiación a medida y la mayor exclusividad en cada unidad.</p>
-        <div class="hero-btns">
-          <a href="#catalogo" class="btn-primary">Ver Stock ↓</a>
-          <a href="https://wa.me/5491100000000" target="_blank" class="btn-outline">Consultanos</a>
+      <div class="hero-content fade-in">
+        <div class="hero-eyebrow">Auto Berlin · Canning</div>
+        <h1 class="hero-title">Ingeniería<br>para quienes<br><span style="color: var(--gold, #DAA520);">exigen lo mejor.</span></h1>
+        <p class="hero-desc" style="font-size: 1.1rem; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.6;">
+          Vehículos premium seleccionados. Sin compromisos, sin atajos. La experiencia de élite en zona sur.
+        </p>
+        <div class="hero-btns" style="display: flex; gap: 1rem;">
+          <a href="#catalogo" class="btn-primary" style="padding: 1rem 2rem; border-radius: 4px; font-weight: 600;">Ver Catálogo</a>
+          <a href="https://wa.me/5491100000000" target="_blank" class="btn-outline" style="padding: 1rem 2rem; border-radius: 4px;">Contacto Directo</a>
         </div>
       </div>
     </div>
-    <div class="hero-stats">
-      <div class="container">
-        <div class="stat-item"><span class="stat-num">10+</span><span class="stat-label">Años de experiencia</span>
-        </div>
-        <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Vehículos entregados</span>
-        </div>
-        <div class="stat-item"><span class="stat-num">#1</span><span class="stat-label">En zona sur</span></div>
+    
+    <div class="hero-stats" style="position: absolute; bottom: 0; left: 0; width: 100%; border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); z-index: 10; padding: 1.5rem 0;">
+      <div class="container" style="display: flex; justify-content: space-between; max-width: 900px; margin: 0 auto; gap: 2rem;">
+        <div class="stat-item" style="text-align: center;"><span class="stat-num" style="display: block; font-size: 1.5rem; font-weight: 600; color: var(--gold);">10+</span><span class="stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888;">Años de exp.</span></div>
+        <div class="stat-item" style="text-align: center;"><span class="stat-num" style="display: block; font-size: 1.5rem; font-weight: 600; color: var(--gold);">200+</span><span class="stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888;">Entregas</span></div>
+        <div class="stat-item" style="text-align: center;"><span class="stat-num" style="display: block; font-size: 1.5rem; font-weight: 600; color: var(--gold);">#1</span><span class="stat-label" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888;">En Zona Sur</span></div>
       </div>
-    </div>
-    <div class="hero-scroll">
-      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- BRANDS -->
+  <!-- BRANDS - CINTA TRANSPORTADORA -->
   <section id="brands">
-    <div class="container">
+    <div class="brands-wrapper">
       <div class="brands-track">
         <span class="brand-item">Ferrari</span>
         <span class="brand-item">Lamborghini</span>
@@ -75,6 +278,23 @@
         <span class="brand-item">Audi</span>
         <span class="brand-item">Range Rover</span>
         <span class="brand-item">Maserati</span>
+        <span class="brand-item">Bugatti</span>
+        <span class="brand-item">Rolls-Royce</span>
+        <span class="brand-item">Bentley</span>
+        <span class="brand-item">Jaguar</span>
+        <!-- Duplicados para loop infinito -->
+        <span class="brand-item">Ferrari</span>
+        <span class="brand-item">Lamborghini</span>
+        <span class="brand-item">Porsche</span>
+        <span class="brand-item">BMW</span>
+        <span class="brand-item">Mercedes-Benz</span>
+        <span class="brand-item">Audi</span>
+        <span class="brand-item">Range Rover</span>
+        <span class="brand-item">Maserati</span>
+        <span class="brand-item">Bugatti</span>
+        <span class="brand-item">Rolls-Royce</span>
+        <span class="brand-item">Bentley</span>
+        <span class="brand-item">Jaguar</span>
       </div>
     </div>
   </section>
@@ -109,11 +329,11 @@
               <div class="feature-item"><span class="feature-icon">🔍</span>
                 <div class="feature-text"><strong>Stock selecto</strong><span>Solo unidades verificadas</span></div>
               </div>
-              <div class="feature-item"><span class="feature-icon">📋</span>
-                <div class="feature-text"><strong>Gestoría completa</strong><span>Sin preocupaciones</span></div>
+              <div class="feature-item"><span class="feature-icon">✅</span>
+                <div class="feature-text"><strong>Garantía de 6 meses</strong><span>Por escrito</span></div>
               </div>
-              <div class="feature-item"><span class="feature-icon">💳</span>
-                <div class="feature-text"><strong>Financiación</strong><span>Planes a tu medida</span></div>
+              <div class="feature-item"><span class="feature-icon">💫</span>
+                <div class="feature-text"><strong>Tratamiento cerámico</strong><span>Protección máxima</span></div>
               </div>
             </div>
           </div>
@@ -122,47 +342,77 @@
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section id="servicios">
-    <div style="padding:5rem 0;background:var(--black);">
+  <!-- SERVICES PREMIUM - DORADO ELEGANTE -->
+  <section id="servicios-premium">
+    <div style="padding: 6rem 0; background: var(--black); position: relative; overflow: hidden;">
       <div class="container">
-        <div class="services-header fade-in">
-          <p class="section-label">Lo que hacemos</p>
-          <div class="gold-line"></div>
+        <!-- Header -->
+        <div class="services-header fade-in" style="text-align: center; margin-bottom: 4rem;">
+          <p class="section-label" style="justify-content: center;">Lo que hacemos</p>
+          <div class="gold-line" style="margin: 0.5rem auto 1rem;"></div>
           <h2 class="section-title">Servicios<br><span>integrales</span></h2>
         </div>
-        <div class="services-grid">
-          <div class="service-card fade-in">
-            <div class="service-icon">🚗</div>
-            <h3>Compra & Venta</h3>
-            <p>Stock exclusivo de alta gama con unidades verificadas y documentación al día. Compramos tu auto usado
-              también.</p>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+          <!-- Card 1: Compra & Venta -->
+          <div class="feature-card" style="--delay: 0.1s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">🚗</div>
+              <h3 class="feature-title">Compra & Venta</h3>
+              <p class="feature-desc">Stock exclusivo de alta gama con unidades verificadas y documentación al día. Compramos tu auto usado también.</p>
+            </div>
           </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">🔑</div>
-            <h3>Consignación</h3>
-            <p>Vendemos tu vehículo por vos. Nos encargamos de todo: publicación, visitas, negociación y cierre.</p>
+
+          <!-- Card 2: Consignación -->
+          <div class="feature-card" style="--delay: 0.2s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">🔑</div>
+              <h3 class="feature-title">Consignación</h3>
+              <p class="feature-desc">Vendemos tu vehículo por vos. Nos encargamos de todo: publicación, visitas, negociación y cierre.</p>
+            </div>
           </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">💳</div>
-            <h3>Financiación</h3>
-            <p>Planes de financiación a medida con las mejores tasas del mercado. Créditos en pesos y dólares.</p>
+
+          <!-- Card 3: Financiación -->
+          <div class="feature-card" style="--delay: 0.3s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">💳</div>
+              <h3 class="feature-title">Financiación</h3>
+              <p class="feature-desc">Planes de financiación a medida con las mejores tasas del mercado. Créditos en pesos y dólares.</p>
+            </div>
           </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">📝</div>
-            <h3>Gestoría</h3>
-            <p>Tramitamos toda la documentación: transferencia, patentamiento, VTV y todos los trámites necesarios.</p>
+
+          <!-- Card 4: Gestoría -->
+          <div class="feature-card" style="--delay: 0.4s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">📝</div>
+              <h3 class="feature-title">Gestoría</h3>
+              <p class="feature-desc">Tramitamos toda la documentación: transferencia, patentamiento, VTV y todos los trámites necesarios.</p>
+            </div>
           </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">🛡️</div>
-            <h3>Seguros</h3>
-            <p>Trabajamos con las principales compañías aseguradoras para ofrecerte la mejor cobertura para tu vehículo.
-            </p>
+
+          <!-- Card 5: Seguros -->
+          <div class="feature-card" style="--delay: 0.5s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">🛡️</div>
+              <h3 class="feature-title">Seguros</h3>
+              <p class="feature-desc">Trabajamos con las principales compañías aseguradoras para ofrecerte la mejor cobertura para tu vehículo.</p>
+            </div>
           </div>
-          <div class="service-card fade-in">
-            <div class="service-icon">🔒</div>
-            <h3>Blindaje</h3>
-            <p>Gestión completa de blindaje con talleres de primera línea. Nivel II, III y superiores disponibles.</p>
+
+          <!-- Card 6: Blindaje -->
+          <div class="feature-card" style="--delay: 0.6s;">
+            <div class="feature-glow"></div>
+            <div class="feature-content">
+              <div class="feature-icon">🔒</div>
+              <h3 class="feature-title">Blindaje</h3>
+              <p class="feature-desc">Gestión completa de blindaje con talleres de primera línea. Nivel II, III y superiores disponibles.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -334,9 +584,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2024 <span>Auto Berlin</span>.
-          Todos los derechos reservados. Canning, Buenos Aires.</p>
-        <p>Diseñado con <span>♥</span> para la élite automotriz</p>
+        <p>© 2024 <span>Auto Berlin</span>. Todos los derechos reservados. Canning, Buenos Aires.</p>
+        <p>Diseñado por Julian Rodriguez - <span style="background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; letter-spacing: 0.5px;">Tel 1132735505</span></p>
       </div>
     </div>
   </footer>
@@ -363,8 +612,51 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <!-- Firebase Config -->
   <script src="js/firebase-config.js"></script>
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="js/vehicles.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Nav dropdown toggle
+    const navBtn = document.getElementById('navMenuBtn');
+    const navPanel = document.getElementById('navMenuPanel');
+    if (navBtn && navPanel) {
+      navBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navPanel.classList.toggle('open');
+      });
+      navPanel.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => navPanel.classList.remove('open'));
+      });
+      document.addEventListener('click', (e) => {
+        if (!navPanel.contains(e.target) && e.target !== navBtn) {
+          navPanel.classList.remove('open');
+        }
+      });
+    }
+
+    // Hero GSAP Animation
+    if (typeof gsap !== 'undefined') {
+      const heroTl = gsap.timeline();
+      heroTl.from("#hero-car", { 
+        x: 1000, 
+        scale: 0.9,
+        opacity: 0,
+        duration: 1.5, 
+        ease: "power4.out" 
+      }, 0.2)
+      .to("#hero-car", {
+        scale: 1.05,
+        duration: 6,
+        ease: "none"
+      }, "-=0.5")
+      .to("#hero-glow", {
+        opacity: 1,
+        duration: 2,
+        ease: "power2.out"
+      }, 0.5);
+    }
+  </script>
 </body>
 
 </html>

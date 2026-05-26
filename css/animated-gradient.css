@@ -1,0 +1,79 @@
+/* ============================================
+   GRADIENTE ANIMADO ELEGANTE DINÁMICO
+   HERO SECTION - AUTO BERLIN
+   ============================================ */
+
+@keyframes gradientShiftElegante {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(184, 134, 11, 0.2) 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientShiftElegante 8s ease infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#hero .hero-bg {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#hero .hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#hero > .container {
+  position: relative !important;
+  z-index: 3;
+  text-align: center;
+}
+
+#hero .hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+#hero .hero-stats {
+  position: relative !important;
+  z-index: 3;
+}
+
+#hero .hero-scroll {
+  position: relative !important;
+  z-index: 3;
+}

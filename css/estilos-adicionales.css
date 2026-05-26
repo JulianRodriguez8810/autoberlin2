@@ -1,0 +1,319 @@
+/* ========================================
+   ESTILOS ADICIONALES - GALERÍA DE VEHÍCULOS
+   ======================================== */
+
+/* Asegurar que el grid de vehículos tenga el clase correcto */
+.vehicles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Estilos para las tarjetas de vehículos con mejor hover */
+.vehicle-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(218, 165, 32, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 0 30px 60px rgba(218, 165, 32, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+}
+
+/* Imagen del vehículo */
+.vehicle-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.vehicle-card:hover .vehicle-image {
+  transform: scale(1.08) rotate(0.5deg);
+}
+
+/* Contenido de la tarjeta */
+.vehicle-card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+/* Badge de estado */
+.vehicle-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--gold);
+  color: var(--dark);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 2;
+}
+
+.vehicle-badge.sold {
+  background: #666;
+  color: #ccc;
+}
+
+/* Nombre del vehículo */
+.vehicle-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+
+.vehicle-year {
+  color: rgba(218, 165, 32, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Detalle del vehículo */
+.vehicle-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.vehicle-card:hover .vehicle-detail {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.vehicle-detail strong {
+  color: rgba(218, 165, 32, 0.9);
+}
+
+/* Precio */
+.vehicle-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(218, 165, 32, 0.2);
+}
+
+.vehicle-price-currency {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-left: 0.3rem;
+}
+
+/* Efecto shine/brillo al hover */
+.vehicle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.vehicle-card:hover::before {
+  left: 100%;
+}
+
+/* ========================================
+   ESTILOS PARA CINTA TRANSPORTADORA - MEJORADO
+   ======================================== */
+
+#brands {
+  background: linear-gradient(180deg, var(--dark) 0%, rgba(0,0,0,0.8) 100%);
+  padding: 3rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#brands .container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+#brands .container::before,
+#brands .container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 12%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#brands .container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--dark), transparent);
+}
+
+#brands .container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--dark), transparent);
+}
+
+.brands-track {
+  display: flex;
+  gap: 3rem;
+  animation: slideMarks 40s linear infinite;
+  padding: 1.5rem 0;
+  width: fit-content;
+}
+
+.brand-item {
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.08em;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  text-transform: uppercase;
+}
+
+.brand-item::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.4s ease;
+}
+
+.brand-item:hover {
+  color: var(--gold);
+  transform: translateY(-3px);
+  text-shadow: 0 0 15px rgba(218, 165, 32, 0.4);
+}
+
+.brand-item:hover::before {
+  width: 100%;
+}
+
+@keyframes slideMarks {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ========================================
+   ARREGLO HERO - SIN SUPERPOSICIÓN
+   ======================================== */
+
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--dark);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+#hero {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+}
+
+/* ========================================
+   MEJORAS RESPONSIVAS
+   ======================================== */
+
+@media (max-width: 768px) {
+  .vehicles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .vehicle-image {
+    height: 220px;
+  }
+
+  .vehicle-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .brand-item {
+    font-size: 1rem;
+  }
+
+  #brands .container::before,
+  #brands .container::after {
+    width: 15%;
+  }
+}
+
+@media (max-width: 480px) {
+  .vehicles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-image {
+    height: 200px;
+  }
+
+  .vehicle-card-content {
+    padding: 1rem;
+  }
+
+  .vehicle-name {
+    font-size: 1.1rem;
+  }
+
+  .vehicle-price {
+    font-size: 1.2rem;
+  }
+
+  .brand-item {
+    font-size: 0.9rem;
+    gap: 2rem;
+  }
+
+  @keyframes slideMarks {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-60%);
+    }
+  }
+}

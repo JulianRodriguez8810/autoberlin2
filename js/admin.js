@@ -460,7 +460,8 @@ async function uploadToCloudinary(file) {
   }
   
   const data = await response.json();
-  return data.secure_url;
+  const optimizedUrl = data.secure_url.replace("/upload/", "/upload/c_fit,w_1600,h_1200,q_auto:best,f_auto/");
+  return optimizedUrl;
 }
 
 document.getElementById('v_image_upload').addEventListener('change', async (e) => {
