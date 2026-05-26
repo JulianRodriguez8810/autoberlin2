@@ -617,23 +617,7 @@
   <script src="js/vehicles.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // Nav dropdown toggle
-    const navBtn = document.getElementById('navMenuBtn');
-    const navPanel = document.getElementById('navMenuPanel');
-    if (navBtn && navPanel) {
-      navBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        navPanel.classList.toggle('open');
-      });
-      navPanel.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => navPanel.classList.remove('open'));
-      });
-      document.addEventListener('click', (e) => {
-        if (!navPanel.contains(e.target) && e.target !== navBtn) {
-          navPanel.classList.remove('open');
-        }
-      });
-    }
+    // Nav dropdown handled in main.js
 
     // Hero GSAP Animation
     if (typeof gsap !== 'undefined') {
