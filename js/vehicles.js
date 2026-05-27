@@ -113,9 +113,23 @@ async function loadVehicles() {
         snapshot.forEach(doc => {
           allVehicles.push(doc.data());
         });
-        // Ordenar por ID descendente (los más nuevos primero)
+        // También cargamos el JSON para combinarlos
+        try {
+          const res = await fetch('data/vehicles.json');
+          if (res.ok) {
+            const data = await res.json();
+            // Evitar duplicados por nombre de modelo
+            data.vehicles.forEach(vJson => {
+              if (!allVehicles.some(vDb => vDb.model === vJson.model)) {
+                allVehicles.push(vJson);
+              }
+            });
+          }
+        } catch(e) {}
+
+        // Ordenar por ID descendente
         allVehicles.sort((a, b) => b.id - a.id);
-        console.log("🚘 Cargado desde Firebase Firestore:", allVehicles.length, "vehículos.");
+        console.log("🚘 Cargado combinando Firestore y JSON:", allVehicles.length, "vehículos.");
         populateBrandFilter();
         renderVehicles(allVehicles);
         return;
