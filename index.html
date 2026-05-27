@@ -503,6 +503,14 @@
           </div>
         </div>
         <div class="vehicles-grid" id="vehiclesGrid"></div>
+        
+        <!-- Paginación -->
+        <div id="paginationControls" style="display: none; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 3.5rem;">
+          <button class="btn-outline" id="btnPrevPage" onclick="prevPage()" style="padding: 0.5rem 1.5rem;">&#8592; Anterior</button>
+          <span id="pageIndicator" style="font-weight: 600; color: var(--gold); font-size: 0.95rem; letter-spacing: 0.1em;">Página 1 de X</span>
+          <button class="btn-outline" id="btnNextPage" onclick="nextPage()" style="padding: 0.5rem 1.5rem;">Siguiente &#8594;</button>
+        </div>
+
         <div class="no-results" id="noResults" style="display:none;">
           <h3>Sin resultados</h3>
           <p>Probá con otros filtros o contactanos para encontrar el auto que buscás.</p>

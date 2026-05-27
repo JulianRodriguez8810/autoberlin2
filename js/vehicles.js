@@ -131,7 +131,8 @@ async function loadVehicles() {
         allVehicles.sort((a, b) => b.id - a.id);
         console.log("🚘 Cargado combinando Firestore y JSON:", allVehicles.length, "vehículos.");
         populateBrandFilter();
-        renderVehicles(allVehicles);
+        filteredVehicles = [...allVehicles];
+        renderPage();
         return;
       }
     } catch (e) {
@@ -150,7 +151,8 @@ async function loadVehicles() {
     allVehicles = VEHICLES_DATA;
   }
   populateBrandFilter();
-  renderVehicles(allVehicles);
+  filteredVehicles = [...allVehicles];
+  renderPage();
 }
 
 function populateBrandFilter() {
@@ -163,16 +165,48 @@ function populateBrandFilter() {
   });
 }
 
-function renderVehicles(list) {
+let currentPage = 1;
+const ITEMS_PER_PAGE = 12;
+let filteredVehicles = [];
+
+function renderPage() {
   const grid = document.getElementById('vehiclesGrid');
   const noRes = document.getElementById('noResults');
   const count = document.getElementById('vehicleCount');
+  const paginationControls = document.getElementById('paginationControls');
+  const pageIndicator = document.getElementById('pageIndicator');
+  const btnPrevPage = document.getElementById('btnPrevPage');
+  const btnNextPage = document.getElementById('btnNextPage');
+
   grid.innerHTML = '';
-  count.textContent = list.length;
-  if (!list.length) { noRes.style.display = 'block'; return; }
+  count.textContent = filteredVehicles.length;
+
+  if (!filteredVehicles.length) { 
+    noRes.style.display = 'block'; 
+    if (paginationControls) paginationControls.style.display = 'none';
+    return; 
+  }
+  
   noRes.style.display = 'none';
 
-  list.forEach(v => {
+  const totalPages = Math.ceil(filteredVehicles.length / ITEMS_PER_PAGE);
+  if (totalPages > 1 && paginationControls) {
+    paginationControls.style.display = 'flex';
+    pageIndicator.textContent = `Página ${currentPage} de ${totalPages}`;
+    btnPrevPage.disabled = currentPage === 1;
+    btnNextPage.disabled = currentPage === totalPages;
+    btnPrevPage.style.opacity = currentPage === 1 ? '0.5' : '1';
+    btnPrevPage.style.cursor = currentPage === 1 ? 'not-allowed' : 'pointer';
+    btnNextPage.style.opacity = currentPage === totalPages ? '0.5' : '1';
+    btnNextPage.style.cursor = currentPage === totalPages ? 'not-allowed' : 'pointer';
+  } else if (paginationControls) {
+    paginationControls.style.display = 'none';
+  }
+
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = filteredVehicles.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+
+  pageItems.forEach(v => {
     const card = document.createElement('div');
     card.className = 'vehicle-card' + (v.status === 'sold' ? ' sold' : '');
     card.innerHTML = `
@@ -215,14 +249,32 @@ function filterVehicles() {
   const brand = document.getElementById('brandFilter').value;
   const fuel = document.getElementById('fuelFilter').value;
   const status = document.getElementById('statusFilter').value;
-  const filtered = allVehicles.filter(v =>
+  filteredVehicles = allVehicles.filter(v =>
     (!search || v.brand.toLowerCase().includes(search) || v.model.toLowerCase().includes(search)) &&
     (!brand || v.brand === brand) &&
     (!fuel || v.fuel === fuel) &&
     (!status || v.status === status)
   );
-  renderVehicles(filtered);
+  currentPage = 1; // Reset a la primera página al filtrar
+  renderPage();
 }
+
+window.prevPage = function() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderPage();
+    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+window.nextPage = function() {
+  const totalPages = Math.ceil(filteredVehicles.length / ITEMS_PER_PAGE);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderPage();
+    document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 function openModal(id) {
   const v = allVehicles.find(x => x.id === id);
