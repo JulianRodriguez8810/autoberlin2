@@ -100,6 +100,19 @@ async function loadAdminVehicles() {
     await loadAdminVehiclesFallback();
   }
   renderAdminTable(adminVehicles);
+  populateAdminBrandFilter();
+}
+
+function populateAdminBrandFilter() {
+  const sel = document.getElementById('adminBrandFilter');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Todas las marcas</option>';
+  const brands = [...new Set(adminVehicles.map(v => v.brand))].sort();
+  brands.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b; opt.textContent = b;
+    sel.appendChild(opt);
+  });
 }
 
 async function loadAdminVehiclesFallback() {
@@ -144,15 +157,24 @@ function renderAdminTable(list) {
   });
 }
 
-// Search
-document.getElementById('adminSearch').addEventListener('input', (e) => {
-  const search = e.target.value.toLowerCase();
+// Search and Filter
+function applyAdminFilters() {
+  const search = document.getElementById('adminSearch').value.toLowerCase();
+  const brandFilterEl = document.getElementById('adminBrandFilter');
+  const brand = brandFilterEl ? brandFilterEl.value : '';
+  
   const filtered = adminVehicles.filter(v => 
-    v.brand.toLowerCase().includes(search) || 
-    v.model.toLowerCase().includes(search)
+    (!search || v.brand.toLowerCase().includes(search) || v.model.toLowerCase().includes(search)) &&
+    (!brand || v.brand === brand)
   );
   renderAdminTable(filtered);
-});
+}
+
+document.getElementById('adminSearch').addEventListener('input', applyAdminFilters);
+const adminBrandFilter = document.getElementById('adminBrandFilter');
+if(adminBrandFilter) {
+  adminBrandFilter.addEventListener('change', applyAdminFilters);
+}
 
 // Modal Logic
 function openVehicleModal(id = null) {

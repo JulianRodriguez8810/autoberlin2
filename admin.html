@@ -47,8 +47,11 @@
         </div>
       </div>
 
-      <div class="filters-bar" style="margin-bottom: 2rem;">
-        <input type="text" class="search-input" id="adminSearch" placeholder="🔍 Buscar vehículo...">
+      <div class="filters-bar" style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+        <input type="text" class="search-input" id="adminSearch" placeholder="🔍 Buscar vehículo..." style="flex: 1;">
+        <select id="adminBrandFilter" class="filter-select">
+          <option value="">Todas las marcas</option>
+        </select>
       </div>
 
       <div class="table-container">
