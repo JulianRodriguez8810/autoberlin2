@@ -76,6 +76,20 @@ async function loadAdminVehicles() {
       snapshot.forEach(doc => {
         adminVehicles.push(doc.data());
       });
+      // También cargar el JSON para combinarlos y poder migrarlos si es necesario
+      try {
+        const res = await fetch('data/vehicles.json');
+        if (res.ok) {
+          const data = await res.json();
+          // Evitar duplicados
+          data.vehicles.forEach(vJson => {
+            if (!adminVehicles.some(vDb => vDb.model === vJson.model)) {
+              adminVehicles.push(vJson);
+            }
+          });
+        }
+      } catch(e) {}
+
       // Ordenar por ID descendente
       adminVehicles.sort((a, b) => b.id - a.id);
     } catch (e) {
