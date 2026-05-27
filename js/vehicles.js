@@ -166,8 +166,17 @@ function populateBrandFilter() {
 }
 
 let currentPage = 1;
-const ITEMS_PER_PAGE = 12;
+let ITEMS_PER_PAGE = window.innerWidth <= 768 ? 4 : 12;
 let filteredVehicles = [];
+
+window.addEventListener('resize', () => {
+  const newItemsPerPage = window.innerWidth <= 768 ? 4 : 12;
+  if (ITEMS_PER_PAGE !== newItemsPerPage) {
+    ITEMS_PER_PAGE = newItemsPerPage;
+    currentPage = 1;
+    renderPage();
+  }
+});
 
 function renderPage() {
   const grid = document.getElementById('vehiclesGrid');
