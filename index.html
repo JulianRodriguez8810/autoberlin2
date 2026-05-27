@@ -8,6 +8,9 @@
   <meta name="description"
     content="Auto Berlin, la concesionaria de autos de alta gama más exclusiva de Canning y zona sur. Ferrari, Porsche, BMW, Mercedes, Lamborghini y más.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/animated-gradient.css">
   <link rel="stylesheet" href="css/services-premium.css">
   <style>
@@ -169,13 +172,53 @@
       font-weight: 700;
     }
     
-    .hero-eyebrow {
-      font-family: monospace;
-      text-transform: uppercase;
+    /* ── HERO BRAND IDENTITY ── */
+    /* Glass pill que hace legible el nombre sobre cualquier fondo */
+    .hero-identity {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      background: rgba(5, 5, 5, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 6px;
+      padding: 0.55rem 1rem 0.55rem 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .hero-brand-name {
+      font-family: 'Cormorant SC', serif;
+      font-size: clamp(1.1rem, 2vw, 1.9rem);
+      font-weight: 600;
       letter-spacing: 0.1em;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+    }
+    .hero-brand-name span {
       color: var(--gold, #DAA520);
-      margin-bottom: 1rem;
-      font-size: 0.85rem;
+    }
+    .hero-eyebrow {
+      font-family: 'Cormorant Garant', serif;
+      font-style: italic;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: rgba(218, 165, 32, 0.8);
+      margin-bottom: 1.8rem;
+      font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: var(--gold, #DAA520);
+      opacity: 0.6;
     }
 
     /* EFECTO HOVER EN GALERÍA DE VEHÍCULOS */
@@ -215,8 +258,12 @@
   <!-- NAV -->
   <nav id="navbar">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo">
-        <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 50px; width: auto;">
+      <a href="#" class="nav-logo" style="display:flex; align-items:center; gap:0.65rem; text-decoration:none;">
+        <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 50px; width: auto; filter: drop-shadow(0 2px 10px rgba(218,165,32,0.3));">
+        <div style="line-height:1;">
+          <div style="font-family:'Cormorant SC',serif; font-size:1.15rem; font-weight:600; letter-spacing:0.12em; color:var(--gold,#DAA520);">AUTO BERLIN</div>
+          <div style="font-family:'Cormorant Garant',serif; font-style:italic; font-size:0.7rem; letter-spacing:0.18em; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-top:1px;">Canning</div>
+        </div>
       </a>
       <!-- Menu desplegable derecho -->
       <div class="nav-menu-wrap" id="navMenuWrap">
@@ -245,7 +292,11 @@
     
     <div class="container">
       <div class="hero-content fade-in">
-        <div class="hero-eyebrow">Auto Berlin · Canning</div>
+        <!-- Identidad de marca con glass pill -->
+        <div class="hero-identity">
+          <div class="hero-brand-name"><span>Auto Berlin</span></div>
+          <div class="hero-eyebrow" style="margin-bottom:0;">Canning · Zona Sur</div>
+        </div>
         <h1 class="hero-title">Ingeniería<br>para quienes<br><span style="color: var(--gold, #DAA520);">exigen lo mejor.</span></h1>
         <p class="hero-desc" style="font-size: 1.1rem; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.6;">
           Vehículos premium seleccionados. Sin compromisos, sin atajos. La experiencia de élite en zona sur.
@@ -554,7 +605,8 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 60px; margin-bottom: 1rem;">
+          <img src="img/logo.jpg" alt="Auto Berlin Logo" style="height: 100px; width: auto; margin-bottom: 0.75rem; filter: drop-shadow(0 4px 20px rgba(218,165,32,0.3));">
+          <div style="font-family: 'Cormorant SC', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 0.12em; color: var(--gold, #DAA520); margin-bottom: 0.5rem;">AUTO BERLIN</div>
           <p>La concesionaria de alta gama de referencia en Canning y zona sur. Más de 10 años conectando personas con
             autos extraordinarios.</p>
           <div class="footer-social">
@@ -584,7 +636,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2024 <span>Auto Berlin</span>. Todos los derechos reservados. Canning, Buenos Aires.</p>
+        <p>© 2026 <span>Auto Berlin</span>. Todos los derechos reservados. Canning, Buenos Aires.</p>
         <p>Diseñado por Julian Rodriguez - <span style="background: linear-gradient(90deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; letter-spacing: 0.5px;">Tel 1132735505</span></p>
       </div>
     </div>
