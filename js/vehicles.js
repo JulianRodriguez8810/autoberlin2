@@ -349,4 +349,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === document.getElementById('modalOverlay')) closeModal();
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Swipe support for mobile gallery
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const modalGallery = document.getElementById('modalGallery');
+  
+  modalGallery.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+  
+  modalGallery.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX < touchStartX - 40) changeSlide(1); // Swipe left -> next
+    if (touchEndX > touchStartX + 40) changeSlide(-1); // Swipe right -> prev
+  }, {passive: true});
 });

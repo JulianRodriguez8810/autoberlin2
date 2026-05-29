@@ -292,7 +292,7 @@ footer{background:var(--dark);border-top:1px solid var(--glass-border);padding:4
   
   /* MODAL */
   .modal-box{margin:1rem;width:calc(100% - 2rem);max-height:95vh;}
-  .modal-gallery{height:250px;}
+  .modal-gallery{height:300px;}
   .modal-content{padding:1.5rem;}
   .modal-title{font-size:1.6rem;}
   .modal-price{font-size:1.8rem;}
