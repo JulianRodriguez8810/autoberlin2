@@ -102,6 +102,8 @@ const VEHICLES_DATA = [
 
 let allVehicles = [];
 window._slideIndex = 0;
+let fsImages = [];
+let fsIndex = 0;
 
 async function loadVehicles() {
   // Intentar cargar desde Firebase Firestore si está disponible
@@ -323,6 +325,16 @@ function openModal(id) {
   document.getElementById('modalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
   window._slideIndex = 0;
+  
+  // Guardar imágenes para pantalla completa
+  fsImages = v.images;
+  
+  // Agregar evento para abrir en pantalla completa al tocar la galería del modal
+  gallery.onclick = (e) => {
+    if(e.target.tagName === 'IMG') {
+      openFsLightbox(window._slideIndex);
+    }
+  };
 }
 
 function changeSlide(dir) {
@@ -336,6 +348,36 @@ function changeSlide(dir) {
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function openFsLightbox(index) {
+  fsIndex = index;
+  updateFsLightbox();
+  document.getElementById('fsLightbox').classList.add('active');
+}
+
+function closeFsLightbox() {
+  document.getElementById('fsLightbox').classList.remove('active');
+}
+
+function changeFsSlide(dir) {
+  if(!fsImages.length) return;
+  fsIndex = (fsIndex + dir + fsImages.length) % fsImages.length;
+  updateFsLightbox();
+}
+
+function updateFsLightbox() {
+  const imgEl = document.getElementById('fsImage');
+  const fillEl = document.getElementById('fsIndicatorFill');
+  imgEl.src = fsImages[fsIndex];
+  
+  // Actualizar barrita dorada
+  if(fsImages.length > 1) {
+    const pct = ((fsIndex + 1) / fsImages.length) * 100;
+    fillEl.style.width = pct + '%';
+  } else {
+    fillEl.style.width = '100%';
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -363,5 +405,22 @@ document.addEventListener('DOMContentLoaded', () => {
     touchEndX = e.changedTouches[0].screenX;
     if (touchEndX < touchStartX - 40) changeSlide(1); // Swipe left -> next
     if (touchEndX > touchStartX + 40) changeSlide(-1); // Swipe right -> prev
+  }, {passive: true});
+
+  // Eventos para el Lightbox Fullscreen
+  document.getElementById('fsClose').addEventListener('click', closeFsLightbox);
+  
+  const fsLightbox = document.getElementById('fsLightbox');
+  let fsTouchStartX = 0;
+  let fsTouchEndX = 0;
+  
+  fsLightbox.addEventListener('touchstart', e => {
+    fsTouchStartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+  
+  fsLightbox.addEventListener('touchend', e => {
+    fsTouchEndX = e.changedTouches[0].screenX;
+    if (fsTouchEndX < fsTouchStartX - 40) changeFsSlide(1);
+    if (fsTouchEndX > fsTouchStartX + 40) changeFsSlide(-1);
   }, {passive: true});
 });
