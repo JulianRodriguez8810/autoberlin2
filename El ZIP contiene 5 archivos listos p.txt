@@ -1,0 +1,15 @@
+El ZIP contiene 5 archivos listos para usar. Acá está exactamente qué hacer con cada uno:
+
+📁 Lo que hay en el ZIP y cómo aplicarlo:
+
+Archivo	Qué hacer
+robots.txt	Subilo a la raíz de tu proyecto Vercel (mismo nivel que index.html)
+sitemap.xml	Ídem — subilo a la raíz
+HEAD-CHANGES.html	Reemplazá el bloque <head> de tu index.html con este (tiene todos los meta OG, Twitter, canonical, fuentes async y geo tags)
+SCHEMA-antes-del-body-closing.html	Pegá el contenido justo antes del </body> en tu index.html
+H1-Y-HERO-IMG-CAMBIOS.txt	Lista de cambios puntuales en el body (H1, alt de imagen, teléfono, Google Maps embed, redes sociales)
+⚠️ Dos cosas que requieren acción manual antes de subir:
+
+Teléfono real — en HEAD-CHANGES.html y SCHEMA-antes-del-body-closing.html hay un placeholder XXXX-XXXX. Reemplazalo con tu número real.
+og:image — está comentado porque necesita una imagen de 1200×630px hosteada. Cuando tengas una foto del showroom o del logo en esas dimensiones, descomentá la línea y actualizá la URL.
+Una vez que subas todo a Vercel y haga deploy, verificá con Google Rich Results Test para confirmar que el schema LocalBusiness se está leyendo bien.

@@ -155,7 +155,7 @@ ul{list-style:none;}
 .vehicle-card.sold{opacity:0.6;}
 .vehicle-img-wrap{position:relative;height:260px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;}
 .vehicle-img-wrap img{width:100%;height:100%;object-fit:contain;object-position:center;transition:transform 0.5s ease;background:#111;}
-.vehicle-card:hover .vehicle-img-wrap img{transform:scale(1.05);}
+.vehicle-card:hover .vehicle-img-wrap img{transform:scale(1.2);}
 .vehicle-badge{position:absolute;top:1rem;left:1rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--black);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;padding:0.3rem 0.7rem;border-radius:3px;}
 .sold-badge{position:absolute;top:1rem;right:1rem;background:rgba(220,50,50,0.9);color:#fff;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;padding:0.3rem 0.7rem;border-radius:3px;}
 .vehicle-body{padding:1.5rem;}
