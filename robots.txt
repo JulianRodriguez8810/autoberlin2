@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# AI search retrieval (allow — these bring traffic)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# AI training crawlers (block — these don't bring traffic)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+Sitemap: https://autoberlin2.vercel.app/sitemap.xml

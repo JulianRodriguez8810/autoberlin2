@@ -1,0 +1,109 @@
+<!--
+  =====================================================================
+  AUTO BERLIN — SCHEMA JSON-LD
+  =====================================================================
+  Pegá este bloque JUSTO ANTES del </body> en index.html.
+  Reemplazá el teléfono real y la URL de la imagen og (si tenés).
+  =====================================================================
+-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AutoDealer",
+      "@id": "https://autoberlin2.vercel.app/#dealer",
+      "name": "Auto Berlin",
+      "description": "Concesionaria de vehículos de alta gama en Canning, zona sur del Gran Buenos Aires. Ferrari, Lamborghini, Porsche, BMW, Mercedes-Benz y más.",
+      "url": "https://autoberlin2.vercel.app/",
+      "telephone": "+54-9-11-XXXX-XXXX",
+      "email": "info@autoberlin.com.ar",
+      "currenciesAccepted": "ARS, USD",
+      "priceRange": "$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. Mariano Castex 375",
+        "addressLocality": "Canning",
+        "addressRegion": "Buenos Aires",
+        "postalCode": "1804",
+        "addressCountry": "AR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -34.8833,
+        "longitude": -58.5167
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "13:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.instagram.com/autoberlin",
+        "https://www.facebook.com/autoberlin"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://autoberlin2.vercel.app/#website",
+      "name": "Auto Berlin",
+      "url": "https://autoberlin2.vercel.app/",
+      "inLanguage": "es-AR",
+      "publisher": {
+        "@id": "https://autoberlin2.vercel.app/#dealer"
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué servicios ofrece Auto Berlin?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Auto Berlin ofrece compra y venta de autos de alta gama, consignación, financiación en pesos y dólares, gestoría completa (transferencia, patentamiento, VTV), gestión de seguros y blindaje nivel II, III y superiores."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Dónde está ubicado Auto Berlin?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Auto Berlin está ubicado en Av. Mariano Castex 375, Canning, Partido de Esteban Echeverría, Buenos Aires. Atendemos de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Auto Berlin ofrece garantía en los vehículos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, todos los vehículos de Auto Berlin incluyen garantía de 6 meses por escrito. Cada unidad es seleccionada y verificada antes de ser incorporada al stock."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué marcas de autos de alta gama tiene disponibles Auto Berlin?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Auto Berlin trabaja con las principales marcas premium: Ferrari, Lamborghini, Porsche, BMW, Mercedes-Benz, Audi, Range Rover, Maserati, Bugatti, Rolls-Royce, Bentley y Jaguar, entre otras."
+      }
+    }
+  ]
+}
+</script>

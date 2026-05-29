@@ -4,15 +4,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Auto Berlin | Vehículos de Alta Gama — Canning</title>
+  <title>Auto Berlin | Autos de Alta Gama en Canning, Buenos Aires</title>
   <meta name="description"
     content="Auto Berlin, la concesionaria de autos de alta gama más exclusiva de Canning y zona sur. Ferrari, Porsche, BMW, Mercedes, Lamborghini y más.">
+    
+  <link rel="canonical" href="https://autoberlin2.vercel.app/">
+
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+
+  <meta property="og:title" content="Auto Berlin | Autos de Alta Gama en Canning, Buenos Aires">
+  <meta property="og:description" content="Auto Berlin, la concesionaria de alta gama más exclusiva de Canning y zona sur. Ferrari, Porsche, BMW, Mercedes y más.">
+  <meta property="og:url" content="https://autoberlin2.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="Auto Berlin">
+  <!-- <meta property="og:image" content="https://autoberlin2.vercel.app/img/og-cover.jpg"> -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Auto Berlin | Autos de Alta Gama en Canning">
+  <meta name="twitter:description" content="Concesionaria de alta gama en zona sur. Ferrari, Porsche, BMW, Mercedes y más.">
+
+  <meta name="theme-color" content="#DAA520">
+  <meta name="geo.region" content="AR-B">
+  <meta name="geo.placename" content="Canning, Buenos Aires">
+  <meta name="geo.position" content="-34.8833;-58.5167">
+  <meta name="ICBM" content="-34.8833, -58.5167">
+
+  <link rel="alternate" hreflang="es-AR" href="https://autoberlin2.vercel.app/">
+
   <link rel="stylesheet" href="css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/animated-gradient.css">
   <link rel="stylesheet" href="css/services-premium.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+SC:wght@300;400;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+SC:wght@300;400;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Cormorant+SC:wght@300;400;600;700&display=swap"></noscript>
   <style>
     /* ── NAVBAR: más compacto ── */
     #navbar {
@@ -286,7 +315,7 @@
     <!-- Animación nativa de fondo (GSAP) -->
     <div class="hero-bg-anim">
       <div id="hero-glow" class="hero-glow"></div>
-      <img id="hero-car" class="hero-car" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1400&q=90" alt="">
+      <img id="hero-car" class="hero-car" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1400&q=90" alt="Auto de alta gama en concesionaria Auto Berlin, Canning">
     </div>
     <div class="hero-gradient-overlay"></div>
     
@@ -297,6 +326,9 @@
           <div class="hero-brand-name"><span>Auto Berlin</span></div>
           <div class="hero-eyebrow" style="margin-bottom:0;">Canning · Zona Sur</div>
         </div>
+        <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
+          Concesionaria de autos de alta gama en Canning, Buenos Aires
+        </span>
         <h1 class="hero-title">Ingeniería<br>para quienes<br><span style="color: var(--gold, #DAA520);">exigen lo mejor.</span></h1>
         <p class="hero-desc" style="font-size: 1.1rem; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); max-width: 480px; margin-bottom: 2.5rem; line-height: 1.6;">
           Vehículos premium seleccionados. Sin compromisos, sin atajos. La experiencia de élite en zona sur.
@@ -577,7 +609,7 @@
             </div>
             <div class="map-wrap">
               <iframe
-                src="https://maps.google.com/maps?q=AutoBerlin%20-%20Veh%C3%ADculos%20de%20Alta%20Gama&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=-34.8493672,-58.5058905&t=&z=17&ie=UTF8&iwloc=&output=embed"
                 allowfullscreen="" loading="lazy"></iframe>
             </div>
           </div>
@@ -712,6 +744,108 @@
       <div class="fs-indicator-fill" id="fsIndicatorFill"></div>
     </div>
   </div>
+
+  <!-- SCHEMA JSON-LD SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AutoDealer",
+        "@id": "https://autoberlin2.vercel.app/#dealer",
+        "name": "Auto Berlin",
+        "description": "Concesionaria de vehículos de alta gama en Canning, zona sur del Gran Buenos Aires. Ferrari, Lamborghini, Porsche, BMW, Mercedes-Benz y más.",
+        "url": "https://autoberlin2.vercel.app/",
+        "telephone": "+54-9-11-0000-0000",
+        "email": "info@autoberlin.com.ar",
+        "currenciesAccepted": "ARS, USD",
+        "priceRange": "$$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Av. Mariano Castex 375",
+          "addressLocality": "Canning",
+          "addressRegion": "Buenos Aires",
+          "postalCode": "1804",
+          "addressCountry": "AR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -34.8833,
+          "longitude": -58.5167
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "09:00",
+            "closes": "13:00"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/autoberlin",
+          "https://www.facebook.com/autoberlin"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://autoberlin2.vercel.app/#website",
+        "name": "Auto Berlin",
+        "url": "https://autoberlin2.vercel.app/",
+        "inLanguage": "es-AR",
+        "publisher": {
+          "@id": "https://autoberlin2.vercel.app/#dealer"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué servicios ofrece Auto Berlin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Auto Berlin ofrece compra y venta de autos de alta gama, consignación, financiación en pesos y dólares, gestoría completa (transferencia, patentamiento, VTV), gestión de seguros y blindaje nivel II, III y superiores."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Dónde está ubicado Auto Berlin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Auto Berlin está ubicado en Av. Mariano Castex 375, Canning, Partido de Esteban Echeverría, Buenos Aires. Atendemos de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Auto Berlin ofrece garantía en los vehículos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí, todos los vehículos de Auto Berlin incluyen garantía de 6 meses por escrito. Cada unidad es seleccionada y verificada antes de ser incorporada al stock."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué marcas de autos de alta gama tiene disponibles Auto Berlin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Auto Berlin trabaja con las principales marcas premium: Ferrari, Lamborghini, Porsche, BMW, Mercedes-Benz, Audi, Range Rover, Maserati, Bugatti, Rolls-Royce, Bentley y Jaguar, entre otras."
+        }
+      }
+    ]
+  }
+  </script>
 </body>
 
 </html>

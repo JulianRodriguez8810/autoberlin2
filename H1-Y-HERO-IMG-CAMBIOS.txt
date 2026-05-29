@@ -1,0 +1,57 @@
+=====================================================================
+AUTO BERLIN — CAMBIOS PUNTUALES EN EL BODY
+=====================================================================
+
+--- CAMBIO 1: H1 (actualmente invisible para SEO) ---
+
+ACTUAL:
+  <h1 class="hero-title">Ingeniería<br>para quienes<br><span style="color: var(--gold, #DAA520);">exigen lo mejor.</span></h1>
+
+REEMPLAZAR CON:
+  <h1 class="hero-title">Autos de Alta<br>Gama en Canning<br><span style="color: var(--gold, #DAA520);">— Auto Berlin.</span></h1>
+
+O si querés mantener la poética pero igualmente rankear, podés mantener el H1
+como tagline y agregar un H2 invisible (visually-hidden) con la keyword:
+
+  <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
+    Concesionaria de autos de alta gama en Canning, Buenos Aires
+  </span>
+  <h1 class="hero-title">Ingeniería<br>para quienes<br><span style="color: var(--gold, #DAA520);">exigen lo mejor.</span></h1>
+
+
+--- CAMBIO 2: Alt de imagen hero (actualmente vacío) ---
+
+ACTUAL:
+  <img id="hero-car" class="hero-car" src="https://images.unsplash.com/..." alt="">
+
+REEMPLAZAR CON:
+  <img id="hero-car" class="hero-car" src="https://images.unsplash.com/..." alt="Auto de alta gama en concesionaria Auto Berlin, Canning">
+
+
+--- CAMBIO 3: Teléfono placeholder ---
+
+BUSCAR Y REEMPLAZAR TODOS:
+  +54 9 11 0000-0000  →  tu número real
+  5491100000000       →  tu número real sin espacios ni guiones (para wa.me)
+
+
+--- CAMBIO 4: Google Maps embed ---
+
+ACTUAL (busca por un query genérico):
+  src="https://maps.google.com/maps?q=AutoBerlin%20-%20Veh%C3%ADculos%20de%20Alta%20Gama..."
+
+REEMPLAZAR CON (usando Google Maps embed con Place ID real):
+  Ve a maps.google.com, buscá "Auto Berlin Canning", hacé clic en Compartir
+  → Insertar mapa → copiá el src del iframe que te da Google.
+  Eso embebe el PIN real de tu negocio, no una búsqueda.
+
+
+--- CAMBIO 5: Íconos de redes sociales en footer ---
+
+ACTUAL:
+  <a href="#" aria-label="Instagram">📷</a>
+  <a href="#" aria-label="Facebook">f</a>
+
+REEMPLAZAR CON tus URLs reales de Instagram y Facebook.
+
+=====================================================================
