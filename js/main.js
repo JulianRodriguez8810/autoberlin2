@@ -36,20 +36,48 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // Contact form
+function validateField(id, errId, checkFn) {
+  const el = document.getElementById(id);
+  const err = document.getElementById(errId);
+  const valid = checkFn(el.value.trim());
+  el.classList.toggle('input-error', !valid);
+  err.classList.toggle('visible', !valid);
+  // Re-check on input to remove error as user types
+  el.addEventListener('input', () => {
+    const ok = checkFn(el.value.trim());
+    el.classList.toggle('input-error', !ok);
+    err.classList.toggle('visible', !ok);
+  }, { once: true });
+  return valid;
+}
+
 function handleForm(e) {
   e.preventDefault();
+
+  const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const notEmpty = v => v.length > 0;
+
+  const ok = [
+    validateField('nombre',  'err-nombre',  notEmpty),
+    validateField('telefono','err-telefono', notEmpty),
+    validateField('email',   'err-email',    isEmail),
+    validateField('interes', 'err-interes',  notEmpty),
+    validateField('mensaje', 'err-mensaje',  notEmpty),
+  ].every(Boolean);
+
+  if (!ok) return;
+
   const btn = e.target.querySelector('button[type="submit"]');
   const originalText = btn.textContent;
-  
   btn.textContent = 'Enviando...';
   btn.disabled = true;
 
   const templateParams = {
-    nombre: document.getElementById("nombre").value,
+    nombre:   document.getElementById("nombre").value,
     telefono: document.getElementById("telefono").value,
-    email: document.getElementById("email").value,
+    email:    document.getElementById("email").value,
     servicio: document.getElementById("interes").value,
-    mensaje: document.getElementById("mensaje").value,
+    mensaje:  document.getElementById("mensaje").value,
   };
 
   emailjs.send("service_eoa40cj", "template_AutoBerlin", templateParams)
