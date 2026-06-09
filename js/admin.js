@@ -1003,15 +1003,19 @@ async function loadAndRenderStockAlerts() {
     }
   }
 
-  // Fallback o fusionar con locales
+  // Fallback o fusionar con locales (excluir demos si hay alertas reales)
   const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
-  localAlerts.forEach(la => {
-    if (la.status === 'pending' && !alerts.some(a => a.ts === la.ts)) {
+  const realLocalAlerts = localAlerts.filter(la => la.status === 'pending' && !['demo1','demo2'].includes(la.id));
+  const demoLocalAlerts  = localAlerts.filter(la => la.status === 'pending' && ['demo1','demo2'].includes(la.id));
+
+  // Agregar alertas reales locales que no estén ya en Firestore
+  realLocalAlerts.forEach(la => {
+    if (!alerts.some(a => a.ts === la.ts)) {
       alerts.push(la);
     }
   });
 
-  // Si no hay alertas, crear algunas de demo para que el dashboard no quede vacío
+  // Solo mostrar demos si no hay ninguna alerta real
   if (alerts.length === 0) {
     const d1 = new Date(); d1.setDate(d1.getDate() - 3);
     const d2 = new Date(); d2.setDate(d2.getDate() - 1);
@@ -1037,8 +1041,10 @@ async function loadAndRenderStockAlerts() {
         status: 'pending'
       }
     ];
-    // Guardar demos en local para que persistan
-    localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(alerts));
+    // Solo guardar demos si no hay reales
+    if (realLocalAlerts.length === 0) {
+      localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(alerts));
+    }
   }
 
   // Ordenar por fecha descendente

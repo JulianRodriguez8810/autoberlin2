@@ -95,14 +95,18 @@ function handleForm(e) {
           status: 'pending'
         };
 
+        // Siempre guardar en localStorage (sirve de respaldo y también de fuente principal para el admin)
+        const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
+        // Limpiar demos si los hay
+        const cleanedAlerts = localAlerts.filter(a => !['demo1','demo2'].includes(a.id));
+        cleanedAlerts.unshift(alertData);
+        localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(cleanedAlerts));
+
+        // También intentar guardar en Firebase (para persistencia cloud), pero no es crítico
         if (typeof db !== 'undefined') {
           db.collection('stock_alerts').add(alertData)
             .then(() => console.log('Alerta de stock guardada en Firebase.'))
-            .catch(err => console.error('Error al guardar alerta en Firebase:', err));
-        } else {
-          const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
-          localAlerts.unshift(alertData);
-          localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(localAlerts));
+            .catch(err => console.warn('Firebase rechazó la alerta (reglas), se guardó en local:', err));
         }
       }
 
