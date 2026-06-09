@@ -99,6 +99,20 @@ async function loadAdminVehicles() {
   } else {
     await loadAdminVehiclesFallback();
   }
+
+  // Rellenar fechas vacías para demo
+  adminVehicles.forEach((v, index) => {
+    if (!v.dateAdded) {
+      const d = new Date();
+      if (index === 0 || index === 4) {
+        d.setDate(d.getDate() - 75); // Más de 60 días para testear la alerta
+      } else {
+        d.setDate(d.getDate() - (index * 5));
+      }
+      v.dateAdded = d.toISOString().split('T')[0];
+    }
+  });
+
   renderAdminTable(adminVehicles);
   populateAdminBrandFilter();
   switchTab('abm');
@@ -134,7 +148,23 @@ function renderAdminTable(list) {
   tbody.innerHTML = '';
 
   list.forEach(v => {
+    const dateAddedStr = v.dateAdded || new Date().toISOString().split('T')[0];
+    const dateAddedObj = new Date(dateAddedStr);
+    const today = new Date();
+    const diffTime = Math.abs(today - dateAddedObj);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const isOldStock = v.status === 'available' && diffDays > 60;
+    
+    // Formatear fecha (DD/MM/YYYY)
+    const [year, month, day] = dateAddedStr.split('-');
+    const formattedDate = `${day}/${month}/${year}`;
+
     const tr = document.createElement('tr');
+    if (isOldStock) {
+      tr.classList.add('old-stock-row');
+    }
+
     tr.innerHTML = `
       <td>${v.id}</td>
       <td>
@@ -147,9 +177,14 @@ function renderAdminTable(list) {
         </div>
       </td>
       <td>${v.year}</td>
+      <td><span style="font-size:0.88rem; color:var(--gray);">${formattedDate}</span></td>
       <td>${v.currency} ${v.price.toLocaleString('es-AR')}</td>
-      <td><span class="badge ${v.status}">${v.status === 'available' ? 'Disponible' : 'Vendido'}</span></td>
+      <td>
+        <span class="badge ${v.status}">${v.status === 'available' ? 'Disponible' : 'Vendido'}</span>
+        ${isOldStock ? '<br><span class="badge warning-stock" title="Este vehículo lleva más de 60 días en stock sin venderse">⚠️ +60 días</span>' : ''}
+      </td>
       <td class="action-btns">
+        <button class="btn-icon" onclick="previewVehicle(${v.id})" title="Vista Previa" style="color:#5b8dee; font-size: 1.1rem; margin-right:0.3rem;">👁️</button>
         <button class="btn-icon" onclick="editVehicle(${v.id})" title="Editar">&#9998;</button>
         <button class="btn-icon delete" onclick="deleteVehicle(${v.id})" title="Eliminar">&#128465;</button>
       </td>
@@ -202,7 +237,7 @@ function openVehicleModal(id = null) {
       document.getElementById('v_desc').value = v.description || '';
       document.getElementById('v_status').value = v.status;
       document.getElementById('v_badge').value = v.badge || '';
-      document.getElementById('v_badge').value = v.badge || '';
+      document.getElementById('v_date_added').value = v.dateAdded || new Date().toISOString().split('T')[0];
       currentVehicleImages = v.images ? [...v.images] : [];
       document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
     }
@@ -212,6 +247,7 @@ function openVehicleModal(id = null) {
     // Defaults
     document.getElementById('v_currency').value = 'USD';
     document.getElementById('v_status').value = 'available';
+    document.getElementById('v_date_added').value = new Date().toISOString().split('T')[0];
     currentVehicleImages = [];
     document.getElementById('v_images').value = '[]';
   }
@@ -251,6 +287,7 @@ document.getElementById('vehicleForm').addEventListener('submit', (e) => {
     description: document.getElementById('v_desc').value,
     status: document.getElementById('v_status').value,
     badge: document.getElementById('v_badge').value,
+    dateAdded: document.getElementById('v_date_added').value || new Date().toISOString().split('T')[0],
     images: images
   };
 
@@ -873,3 +910,77 @@ window.deleteVehicle = function(id) {
   if (v) logActivity('delete', `Vehiculo eliminado: ${v.brand} ${v.model} ${v.year}`);
   _origDeleteVehicle(id);
 };
+
+// Vista previa del vehículo
+function previewVehicle(id) {
+  const v = adminVehicles.find(x => x.id === id);
+  if (!v) return;
+
+  const content = document.getElementById('previewModalContent');
+  if (!content) return;
+
+  const statusHtml = v.status === 'sold'
+    ? '<span style="color:#ff4444;font-size:0.8rem;font-weight:600;margin-top:0.3rem;display:block;">● VENDIDO</span>'
+    : '<span style="color:#25D366;font-size:0.8rem;font-weight:600;margin-top:0.3rem;display:block;">● DISPONIBLE</span>';
+
+  const dateAddedStr = v.dateAdded || new Date().toISOString().split('T')[0];
+  const [year, month, day] = dateAddedStr.split('-');
+  const formattedDate = `${day}/${month}/${year}`;
+
+  content.innerHTML = `
+    <div class="preview-card-wrap">
+      <img src="${v.images && v.images[0] ? v.images[0] : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80'}" class="preview-img" onerror="this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80'">
+      <div class="preview-body">
+        <div class="preview-header">
+          <div>
+            <p style="color:var(--gold); font-size:0.8rem; margin:0; text-transform:uppercase; font-weight:700;">${v.brand}</p>
+            <h3 style="margin: 0 0 0.5rem 0; font-family: var(--font-display); font-size:1.6rem;">${v.model} <span style="color:var(--gold)">${v.year}</span></h3>
+            <span style="font-size:0.75rem; color:rgba(255,255,255,0.4)">Fecha ingreso: ${formattedDate}</span>
+          </div>
+          <div style="text-align:right;">
+            <p style="color:rgba(255,255,255,0.4); font-size:0.7rem; text-transform:uppercase; margin:0;">Precio</p>
+            <p style="font-size:1.4rem; font-weight:700; color:var(--gold); margin:0;">${v.currency} ${v.price.toLocaleString('es-AR')}</p>
+            ${statusHtml}
+          </div>
+        </div>
+        
+        <div class="preview-specs-grid">
+          <div class="preview-spec-item">
+            <div class="label">Kilometraje</div>
+            <div class="value">${v.km.toLocaleString('es-AR')} km</div>
+          </div>
+          <div class="preview-spec-item">
+            <div class="label">Combustible</div>
+            <div class="value">${v.fuel || 'Nafta'}</div>
+          </div>
+          <div class="preview-spec-item">
+            <div class="label">Transmisión</div>
+            <div class="value">${v.transmission || 'Manual'}</div>
+          </div>
+          <div class="preview-spec-item">
+            <div class="label">Motor</div>
+            <div class="value">${v.engine || '--'}</div>
+          </div>
+          <div class="preview-spec-item">
+            <div class="label">Color</div>
+            <div class="value">${v.color || '--'}</div>
+          </div>
+          <div class="preview-spec-item">
+            <div class="label">Año</div>
+            <div class="value">${v.year}</div>
+          </div>
+        </div>
+        
+        <p style="color:rgba(255,255,255,0.7); font-size:0.88rem; line-height:1.6; margin-top:1rem;">${v.description || 'Sin descripción disponible.'}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('previewModalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePreviewModal() {
+  document.getElementById('previewModalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}

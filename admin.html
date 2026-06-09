@@ -148,6 +148,140 @@
     .history-text { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
     .history-date { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 2px; }
     .history-empty { text-align: center; color: rgba(255,255,255,0.25); font-size: 0.9rem; padding: 2rem 0; }
+
+    /* ── TOOLTIP DE EXPLICACIÓN DE FEATURES ── */
+    .feature-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .info-tooltip-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      cursor: help;
+    }
+    .info-icon-btn {
+      font-size: 0.72rem;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    .info-tooltip-container:hover .info-icon-btn {
+      background: var(--gold, #DAA520);
+      color: var(--black, #000);
+      border-color: var(--gold, #DAA520);
+    }
+    .info-tooltip-text {
+      visibility: hidden;
+      opacity: 0;
+      width: 210px;
+      background: #141414;
+      color: rgba(255,255,255,0.95);
+      text-align: left;
+      border-radius: 8px;
+      padding: 0.75rem 0.9rem;
+      position: absolute;
+      z-index: 1000;
+      bottom: 135%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.76rem;
+      font-family: inherit;
+      line-height: 1.4;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+      pointer-events: none;
+      font-weight: normal;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .info-tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #141414 transparent transparent transparent;
+    }
+    .info-tooltip-container:hover .info-tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* ── ALERTA DE STOCK VIEJO ── */
+    .badge.warning-stock {
+      background: rgba(239, 156, 11, 0.15);
+      color: #ef9c0b;
+      border: 1px solid rgba(239, 156, 11, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 700;
+    }
+    .old-stock-row {
+      background: rgba(239, 156, 11, 0.02) !important;
+    }
+
+    /* ── VEHICLE PREVIEW CARD INSIDE MODAL ── */
+    .preview-card-wrap {
+      border-radius: 8px;
+      overflow: hidden;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .preview-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    .preview-body {
+      padding: 1.5rem;
+    }
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.75rem;
+    }
+    .preview-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.02);
+      padding: 0.75rem;
+      border-radius: 6px;
+    }
+    .preview-spec-item {
+      font-size: 0.8rem;
+    }
+    .preview-spec-item .label {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    .preview-spec-item .value {
+      font-weight: 600;
+      color: var(--white);
+    }
   </style>
 </head>
 
@@ -212,6 +346,7 @@
                 <th>ID</th>
                 <th>Vehículo</th>
                 <th>Año</th>
+                <th>Ingreso</th>
                 <th>Precio</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -230,33 +365,69 @@
           <div class="kpi-card">
             <div class="kpi-icon">🚗</div>
             <div class="kpi-value" id="kpiTotal">—</div>
-            <div class="kpi-label">Total en Stock</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Total en Stock</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Cantidad total de vehículos registrados en el catálogo (activos y vendidos).</span>
+              </div>
+            </div>
           </div>
           <div class="kpi-card">
             <div class="kpi-icon">✅</div>
             <div class="kpi-value" id="kpiAvailable">—</div>
-            <div class="kpi-label">Disponibles</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Disponibles</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Vehículos que se muestran actualmente en la web listos para la venta.</span>
+              </div>
+            </div>
           </div>
           <div class="kpi-card">
             <div class="kpi-icon">🤝</div>
             <div class="kpi-value" id="kpiSold">—</div>
-            <div class="kpi-label">Vendidos</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Vendidos</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Vehículos históricos que ya fueron vendidos a clientes.</span>
+              </div>
+            </div>
           </div>
           <div class="kpi-card">
             <div class="kpi-icon">💰</div>
             <div class="kpi-value" id="kpiValue">—</div>
-            <div class="kpi-label">Valor del Stock</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Valor del Stock</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Suma total del valor de los vehículos que están disponibles en stock en USD.</span>
+              </div>
+            </div>
             <div class="kpi-sub" id="kpiValueSub"></div>
           </div>
           <div class="kpi-card">
             <div class="kpi-icon">📈</div>
             <div class="kpi-value" id="kpiAvgPrice">—</div>
-            <div class="kpi-label">Precio Promedio</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Precio Promedio</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Valor promedio de venta de las unidades actualmente disponibles en USD.</span>
+              </div>
+            </div>
           </div>
           <div class="kpi-card">
             <div class="kpi-icon">🏆</div>
             <div class="kpi-value" id="kpiTopBrand">—</div>
-            <div class="kpi-label">Marca Líder</div>
+            <div class="feature-title-wrap">
+              <span class="kpi-label">Marca Líder</span>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">La marca que posee más vehículos activos en stock actualmente.</span>
+              </div>
+            </div>
             <div class="kpi-sub" id="kpiTopBrandSub"></div>
           </div>
         </div>
@@ -264,18 +435,36 @@
         <!-- CHARTS -->
         <div class="charts-grid">
           <div class="chart-card">
-            <h3>📦 Distribución por Marca</h3>
+            <div class="feature-title-wrap" style="margin-bottom:1.25rem;">
+              <h3 style="margin-bottom:0;">📦 Distribución por Marca</h3>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Proporción de vehículos de cada fabricante en el stock disponible.</span>
+              </div>
+            </div>
             <canvas id="chartBrands"></canvas>
           </div>
           <div class="chart-card">
-            <h3>💵 Precio Promedio por Marca (USD)</h3>
+            <div class="feature-title-wrap" style="margin-bottom:1.25rem;">
+              <h3 style="margin-bottom:0;">💵 Precio Promedio por Marca (USD)</h3>
+              <div class="info-tooltip-container">
+                <span class="info-icon-btn">i</span>
+                <span class="info-tooltip-text">Precio promedio comparativo entre las distintas marcas disponibles.</span>
+              </div>
+            </div>
             <canvas id="chartPrices"></canvas>
           </div>
         </div>
 
         <!-- HISTORIAL -->
         <div class="history-card">
-          <h3>🕐 Historial de Actividad</h3>
+          <div class="feature-title-wrap" style="margin-bottom:1.25rem;">
+            <h3 style="margin-bottom:0;">🕐 Historial de Actividad</h3>
+            <div class="info-tooltip-container">
+              <span class="info-icon-btn">i</span>
+              <span class="info-tooltip-text">Últimas acciones realizadas en el panel (altas, bajas, modificaciones).</span>
+            </div>
+          </div>
           <ul class="history-list" id="historyList">
             <li class="history-empty">No hay actividad registrada aún.</li>
           </ul>
@@ -332,6 +521,11 @@
           <div class="form-group"><label>Etiqueta (Ej: EXCLUSIVO)</label><input type="text" id="v_badge"></div>
         </div>
 
+        <div class="form-row">
+          <div class="form-group"><label>Fecha de Ingreso</label><input type="date" id="v_date_added" required></div>
+          <div class="form-group"></div>
+        </div>
+
         <div class="form-group">
           <label>Imágenes del Vehículo</label>
           <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
@@ -348,6 +542,19 @@
           <button type="submit" class="btn-primary" style="flex:1; justify-content:center;">Guardar Vehículo</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- VEHICLE PREVIEW MODAL -->
+  <div class="modal-overlay" id="previewModalOverlay">
+    <div class="modal-box" style="max-width: 600px; padding: 2rem; border-radius: 12px; background: var(--dark); border: 1px solid rgba(255,255,255,0.1); color: white;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-family: var(--font-display); color: var(--gold); margin: 0; font-size: 1.5rem;">Vista Previa del Vehículo</h2>
+        <button class="modal-close" onclick="closePreviewModal()" style="position: static; color: white;">✕</button>
+      </div>
+      <div id="previewModalContent">
+        <!-- Contenido renderizado dinámicamente -->
+      </div>
     </div>
   </div>
 
