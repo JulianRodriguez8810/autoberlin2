@@ -82,6 +82,30 @@ function handleForm(e) {
 
   emailjs.send("service_eoa40cj", "template_AutoBerlin", templateParams)
     .then(() => {
+      // Guardar alerta de stock si el checkbox está marcado
+      const notInStockChecked = document.getElementById('not_in_stock') && document.getElementById('not_in_stock').checked;
+      if (notInStockChecked) {
+        const alertData = {
+          nombre: templateParams.nombre,
+          telefono: templateParams.telefono,
+          email: templateParams.email,
+          interes: templateParams.servicio,
+          mensaje: templateParams.mensaje,
+          ts: new Date().toISOString(),
+          status: 'pending'
+        };
+
+        if (typeof db !== 'undefined') {
+          db.collection('stock_alerts').add(alertData)
+            .then(() => console.log('Alerta de stock guardada en Firebase.'))
+            .catch(err => console.error('Error al guardar alerta en Firebase:', err));
+        } else {
+          const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
+          localAlerts.unshift(alertData);
+          localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(localAlerts));
+        }
+      }
+
       btn.textContent = '✓ Enviado — Te contactamos pronto';
       btn.style.background = '#25D366';
       btn.style.color = '#fff';

@@ -454,6 +454,33 @@
             </div>
             <canvas id="chartPrices"></canvas>
           </div>
+        <!-- PEDIDOS DE STOCK PENDIENTES -->
+        <div class="history-card" style="margin-bottom: 2rem;">
+          <div class="feature-title-wrap" style="margin-bottom:1.25rem;">
+            <h3 style="margin-bottom:0;">📬 Pedidos de Stock Pendientes</h3>
+            <div class="info-tooltip-container">
+              <span class="info-icon-btn">i</span>
+              <span class="info-tooltip-text">Personas que consultaron por vehículos que no estaban en stock.</span>
+            </div>
+          </div>
+          <div class="table-container" style="background: transparent; border: none; overflow-x: auto;">
+            <table class="admin-table" style="font-size: 0.9rem;">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Contacto</th>
+                  <th>Mensaje / Vehículo Buscado</th>
+                  <th>Fecha</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="stockAlertsTableBody">
+                <tr>
+                  <td colspan="5" style="text-align: center; color: rgba(255,255,255,0.3); padding: 2rem 0;">Cargando pedidos de stock...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- HISTORIAL -->

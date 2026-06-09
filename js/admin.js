@@ -887,6 +887,7 @@ function renderDashboard() {
   renderKpis(adminVehicles);
   renderCharts(adminVehicles);
   renderActivityLog();
+  loadAndRenderStockAlerts();
 }
 
 // Hook: registrar actividad al guardar vehiculo
@@ -983,4 +984,125 @@ function previewVehicle(id) {
 function closePreviewModal() {
   document.getElementById('previewModalOverlay').classList.remove('active');
   document.body.style.overflow = '';
+}
+
+async function loadAndRenderStockAlerts() {
+  const tbody = document.getElementById('stockAlertsTableBody');
+  if (!tbody) return;
+
+  let alerts = [];
+
+  if (typeof db !== 'undefined') {
+    try {
+      const snapshot = await db.collection('stock_alerts').where('status', '==', 'pending').get();
+      snapshot.forEach(doc => {
+        alerts.push({ id: doc.id, ...doc.data() });
+      });
+    } catch(e) {
+      console.error("Error cargando alertas de stock de Firestore:", e);
+    }
+  }
+
+  // Fallback o fusionar con locales
+  const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
+  localAlerts.forEach(la => {
+    if (la.status === 'pending' && !alerts.some(a => a.ts === la.ts)) {
+      alerts.push(la);
+    }
+  });
+
+  // Si no hay alertas, crear algunas de demo para que el dashboard no quede vacío
+  if (alerts.length === 0) {
+    const d1 = new Date(); d1.setDate(d1.getDate() - 3);
+    const d2 = new Date(); d2.setDate(d2.getDate() - 1);
+    alerts = [
+      {
+        id: 'demo1',
+        nombre: 'Juan Pérez',
+        telefono: '11 2233 4455',
+        email: 'juan.perez@example.com',
+        interes: 'Consulta por un vehículo',
+        mensaje: 'Busco un Porsche 911 Carrera S modelo 2021 o superior, en lo posible color Gris Crayón.',
+        ts: d1.toISOString(),
+        status: 'pending'
+      },
+      {
+        id: 'demo2',
+        nombre: 'María Rodríguez',
+        telefono: '11 9988 7766',
+        email: 'maria.rodriguez@example.com',
+        interes: 'Otro',
+        mensaje: 'Me interesa un BMW M4 manual. Avísenme si les ingresa alguna unidad.',
+        ts: d2.toISOString(),
+        status: 'pending'
+      }
+    ];
+    // Guardar demos en local para que persistan
+    localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(alerts));
+  }
+
+  // Ordenar por fecha descendente
+  alerts.sort((a, b) => new Date(b.ts) - new Date(a.ts));
+
+  if (alerts.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: rgba(255,255,255,0.3); padding: 2rem 0;">No hay pedidos de stock pendientes.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = alerts.map(a => {
+    const date = new Date(a.ts);
+    const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+    
+    // Botón de acción dependiendo si es demo, local o de firestore
+    const resolveClick = `resolveStockAlert('${a.id}', '${a.ts}')`;
+
+    return `
+      <tr>
+        <td><strong>${a.nombre}</strong></td>
+        <td>
+          <div style="font-size:0.85rem; line-height:1.4;">
+            📞 <a href="tel:${a.telefono}" style="color:var(--white);">${a.telefono}</a><br>
+            ✉️ <a href="mailto:${a.email}" style="color:var(--gold);">${a.email}</a>
+          </div>
+        </td>
+        <td>
+          <div style="max-width:320px; white-space:normal; font-size:0.85rem; color:rgba(255,255,255,0.8); line-height:1.4;">
+            ${a.mensaje}
+          </div>
+        </td>
+        <td><span style="font-size:0.85rem; color:var(--gray);">${dateStr}</span></td>
+        <td>
+          <button class="btn-outline" onclick="${resolveClick}" style="padding:0.4rem 0.6rem; font-size:0.75rem; border-color:#25D366; color:#25D366;">
+            ✓ Contactado
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function resolveStockAlert(id, ts) {
+  if (confirm('¿Marcar este pedido de stock como resuelto/contactado?')) {
+    // Si es demo o local
+    let resolvedLocal = false;
+    const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
+    const idx = localAlerts.findIndex(a => a.ts === ts || a.id === id);
+    if (idx !== -1) {
+      localAlerts[idx].status = 'resolved';
+      localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(localAlerts));
+      resolvedLocal = true;
+    }
+
+    if (typeof db !== 'undefined' && id && !id.startsWith('demo')) {
+      try {
+        await db.collection('stock_alerts').doc(id).update({ status: 'resolved' });
+      } catch(e) {
+        console.error("Error al actualizar estado en Firestore:", e);
+      }
+    }
+
+    logActivity('edit', 'Pedido de stock marcado como contactado');
+    loadAndRenderStockAlerts();
+    renderActivityLog();
+  }
 }
