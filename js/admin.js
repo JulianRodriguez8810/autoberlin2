@@ -101,6 +101,7 @@ async function loadAdminVehicles() {
   }
   renderAdminTable(adminVehicles);
   populateAdminBrandFilter();
+  switchTab('abm');
 }
 
 function populateAdminBrandFilter() {
@@ -680,3 +681,195 @@ async function migrateLocalDataToFirebase() {
     btn.innerText = originalText;
   }
 }
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+
+const HISTORY_KEY = 'ab_activity_log';
+let chartBrandsInst = null;
+let chartPricesInst = null;
+
+// Tab switching
+function switchTab(tab) {
+  ['panelAbm', 'panelDashboard'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  ['tabBtnAbm', 'tabBtnDash'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+
+  if (tab === 'abm') {
+    document.getElementById('panelAbm').classList.add('active');
+    document.getElementById('tabBtnAbm').classList.add('active');
+    const btn = document.getElementById('btnNewVehicle');
+    if (btn) btn.style.display = 'flex';
+  } else {
+    document.getElementById('panelDashboard').classList.add('active');
+    document.getElementById('tabBtnDash').classList.add('active');
+    const btn = document.getElementById('btnNewVehicle');
+    if (btn) btn.style.display = 'none';
+    renderDashboard();
+  }
+}
+
+// Activity log
+function logActivity(type, message) {
+  const log = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  log.unshift({ type, message, ts: new Date().toISOString() });
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(log.slice(0, 50)));
+}
+
+function renderActivityLog() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+  const log  = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  if (!log.length) {
+    list.innerHTML = '<li class="history-empty">No hay actividad registrada aun.</li>';
+    return;
+  }
+  list.innerHTML = log.map(e => {
+    const date = new Date(e.ts);
+    const dateStr = date.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    return `<li class="history-item">
+      <div class="history-dot ${e.type}"></div>
+      <div>
+        <div class="history-text">${e.message}</div>
+        <div class="history-date">${dateStr} · ${timeStr}</div>
+      </div>
+    </li>`;
+  }).join('');
+}
+
+// KPIs
+function renderKpis(vehicles) {
+  const available = vehicles.filter(v => v.status === 'available');
+  const sold      = vehicles.filter(v => v.status === 'sold');
+  const usdAvail  = available.filter(v => v.currency === 'USD');
+  const totalUSD  = usdAvail.reduce((acc, v) => acc + (v.price || 0), 0);
+  const avgPrice  = usdAvail.length ? Math.round(totalUSD / usdAvail.length) : 0;
+
+  const brandCount = {};
+  available.forEach(v => { brandCount[v.brand] = (brandCount[v.brand] || 0) + 1; });
+  const topBrand = Object.entries(brandCount).sort((a, b) => b[1] - a[1])[0];
+
+  const kpiTotalEl = document.getElementById('kpiTotal');
+  const kpiAvailEl = document.getElementById('kpiAvailable');
+  const kpiSoldEl = document.getElementById('kpiSold');
+  const kpiValueEl = document.getElementById('kpiValue');
+  const kpiValueSubEl = document.getElementById('kpiValueSub');
+  const kpiAvgEl = document.getElementById('kpiAvgPrice');
+  const kpiTopBrandEl = document.getElementById('kpiTopBrand');
+  const kpiTopBrandSubEl = document.getElementById('kpiTopBrandSub');
+
+  if (kpiTotalEl) kpiTotalEl.textContent = vehicles.length;
+  if (kpiAvailEl) kpiAvailEl.textContent = available.length;
+  if (kpiSoldEl) kpiSoldEl.textContent = sold.length;
+  if (kpiValueEl) kpiValueEl.textContent = totalUSD ? `USD ${(totalUSD / 1000).toFixed(0)}K` : '--';
+  if (kpiValueSubEl) kpiValueSubEl.textContent = usdAvail.length ? `${usdAvail.length} unidades USD` : '';
+  if (kpiAvgEl) kpiAvgEl.textContent = avgPrice ? `USD ${avgPrice.toLocaleString('es-AR')}` : '--';
+  if (kpiTopBrandEl) kpiTopBrandEl.textContent = topBrand ? topBrand[0] : '--';
+  if (kpiTopBrandSubEl) kpiTopBrandSubEl.textContent = topBrand ? `${topBrand[1]} unidad${topBrand[1] > 1 ? 'es' : ''} disponible${topBrand[1] > 1 ? 's' : ''}` : '';
+}
+
+// Charts
+const CHART_COLORS = [
+  '#DAA520','#5b8dee','#25D366','#e05252','#a78bfa',
+  '#f59e0b','#06b6d4','#f97316','#ec4899','#84cc16','#6366f1','#14b8a6'
+];
+
+function renderCharts(vehicles) {
+  const available = vehicles.filter(v => v.status === 'available');
+
+  // Donut: distribucion por marca
+  const brandMap = {};
+  available.forEach(v => { brandMap[v.brand] = (brandMap[v.brand] || 0) + 1; });
+  const brandLabels = Object.keys(brandMap).sort((a, b) => brandMap[b] - brandMap[a]);
+  const brandData   = brandLabels.map(b => brandMap[b]);
+
+  const chartBrandsEl = document.getElementById('chartBrands');
+  if (chartBrandsEl) {
+    if (chartBrandsInst) chartBrandsInst.destroy();
+    chartBrandsInst = new Chart(chartBrandsEl, {
+      type: 'doughnut',
+      data: {
+        labels: brandLabels,
+        datasets: [{ data: brandData, backgroundColor: CHART_COLORS, borderColor: '#0d0d0d', borderWidth: 2 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: 'rgba(255,255,255,0.65)', font: { size: 11 }, boxWidth: 12 } }
+        },
+        cutout: '62%'
+      }
+    });
+  }
+
+  // Bar: precio promedio USD por marca
+  const brandPriceMap = {};
+  vehicles.filter(v => v.currency === 'USD').forEach(v => {
+    if (!brandPriceMap[v.brand]) brandPriceMap[v.brand] = [];
+    brandPriceMap[v.brand].push(v.price);
+  });
+  const priceLabels = Object.keys(brandPriceMap).sort();
+  const priceData   = priceLabels.map(b => Math.round(brandPriceMap[b].reduce((a, c) => a + c, 0) / brandPriceMap[b].length));
+
+  const chartPricesEl = document.getElementById('chartPrices');
+  if (chartPricesEl) {
+    if (chartPricesInst) chartPricesInst.destroy();
+    chartPricesInst = new Chart(chartPricesEl, {
+      type: 'bar',
+      data: {
+        labels: priceLabels,
+        datasets: [{
+          label: 'Precio prom. USD',
+          data: priceData,
+          backgroundColor: 'rgba(218,165,32,0.7)',
+          borderColor: '#DAA520',
+          borderWidth: 1,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: 'rgba(255,255,255,0.5)', callback: v => `$${(v / 1000).toFixed(0)}K` }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+  }
+}
+
+function renderDashboard() {
+  renderKpis(adminVehicles);
+  renderCharts(adminVehicles);
+  renderActivityLog();
+}
+
+// Hook: registrar actividad al guardar vehiculo
+document.getElementById('vehicleForm').addEventListener('submit', () => {
+  const id     = document.getElementById('v_id').value;
+  const brand  = document.getElementById('v_brand').value;
+  const model  = document.getElementById('v_model').value;
+  const status = document.getElementById('v_status').value;
+  if (id) {
+    logActivity(status === 'sold' ? 'sold' : 'edit',
+      `${brand} ${model} actualizado${status === 'sold' ? ' \u2014 marcado como VENDIDO' : ''}`);
+  } else {
+    logActivity('added', `Nuevo vehiculo agregado: ${brand} ${model}`);
+  }
+});
+
+// Hook: registrar actividad al eliminar
+const _origDeleteVehicle = window.deleteVehicle;
+window.deleteVehicle = function(id) {
+  const v = adminVehicles.find(x => x.id === id);
+  if (v) logActivity('delete', `Vehiculo eliminado: ${v.brand} ${v.model} ${v.year}`);
+  _origDeleteVehicle(id);
+};

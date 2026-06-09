@@ -7,6 +7,148 @@
   <title>Admin - Auto Berlin</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    /* ── ADMIN TABS ── */
+    .admin-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 0;
+    }
+    .admin-tab-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.45);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s ease;
+      position: relative;
+      top: 1px;
+    }
+    .admin-tab-btn.active {
+      color: var(--gold, #DAA520);
+      border-bottom-color: var(--gold, #DAA520);
+    }
+    .admin-tab-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.75);
+    }
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .kpi-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(218,165,32,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .kpi-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold, #DAA520);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .kpi-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .kpi-sub {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 0.5rem;
+    }
+
+    /* ── CHARTS GRID ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    @media(max-width:768px) { .charts-grid { grid-template-columns: 1fr; } }
+    .chart-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .chart-card h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.25rem;
+    }
+    .chart-card canvas { max-height: 260px; }
+
+    /* ── HISTORY ── */
+    .history-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+    }
+    .history-card h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.25rem;
+    }
+    .history-list { list-style: none; padding: 0; margin: 0; }
+    .history-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold, #DAA520);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .history-dot.sold { background: #25D366; }
+    .history-dot.added { background: #5b8dee; }
+    .history-text { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.5; }
+    .history-date { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 2px; }
+    .history-empty { text-align: center; color: rgba(255,255,255,0.25); font-size: 0.9rem; padding: 2rem 0; }
+  </style>
 </head>
 
 <body>
@@ -33,44 +175,113 @@
   <!-- ADMIN DASHBOARD -->
   <section id="adminDashboard" class="admin-section" style="display: none;">
     <div class="container">
+
+      <!-- Header -->
       <div class="admin-header">
         <div>
-          <h2>Gestión de Vehículos</h2>
+          <h2>Panel de Control</h2>
           <p id="adminUserEmail" style="color: var(--gold); font-size: 0.85rem;"></p>
         </div>
         <div class="admin-actions" style="display: flex; gap: 0.75rem; align-items: center;">
           <button class="btn-outline" onclick="migrateLocalDataToFirebase()" id="btnMigrate" style="border-color: var(--gold); color: var(--gold); display: flex; align-items: center; gap: 0.4rem;">☁️ Sincronizar Firebase</button>
-          <button class="btn-outline" onclick="openVehicleModal()" style="display: flex; align-items: center; gap: 0.4rem;">
+          <button class="btn-outline" onclick="openVehicleModal()" id="btnNewVehicle" style="display: none; align-items: center; gap: 0.4rem;">
             <span style="font-size: 1.2rem;">+</span> Nuevo Vehículo
           </button>
           <button class="btn-outline" onclick="logout()" id="btnLogout" style="border-color: #ff4444; color: #ff4444;">🚪 Cerrar Sesión</button>
         </div>
       </div>
 
-      <div class="filters-bar" style="margin-bottom: 2rem; display: flex; gap: 1rem;">
-        <input type="text" class="search-input" id="adminSearch" placeholder="🔍 Buscar vehículo..." style="flex: 1;">
-        <select id="adminBrandFilter" class="filter-select">
-          <option value="">Todas las marcas</option>
-        </select>
+      <!-- TABS -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" id="tabBtnAbm" onclick="switchTab('abm')">📋 Inventario</button>
+        <button class="admin-tab-btn" id="tabBtnDash" onclick="switchTab('dashboard')">📊 Dashboard</button>
       </div>
 
-      <div class="table-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Vehículo</th>
-              <th>Año</th>
-              <th>Precio</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="adminTableBody">
-            <!-- Vehículos cargados aquí -->
-          </tbody>
-        </table>
+      <!-- PANEL: ABM -->
+      <div class="admin-panel active" id="panelAbm">
+        <div class="filters-bar" style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+          <input type="text" class="search-input" id="adminSearch" placeholder="🔍 Buscar vehículo..." style="flex: 1;">
+          <select id="adminBrandFilter" class="filter-select">
+            <option value="">Todas las marcas</option>
+          </select>
+        </div>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Vehículo</th>
+                <th>Año</th>
+                <th>Precio</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- PANEL: DASHBOARD -->
+      <div class="admin-panel" id="panelDashboard">
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon">🚗</div>
+            <div class="kpi-value" id="kpiTotal">—</div>
+            <div class="kpi-label">Total en Stock</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">✅</div>
+            <div class="kpi-value" id="kpiAvailable">—</div>
+            <div class="kpi-label">Disponibles</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">🤝</div>
+            <div class="kpi-value" id="kpiSold">—</div>
+            <div class="kpi-label">Vendidos</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-value" id="kpiValue">—</div>
+            <div class="kpi-label">Valor del Stock</div>
+            <div class="kpi-sub" id="kpiValueSub"></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-value" id="kpiAvgPrice">—</div>
+            <div class="kpi-label">Precio Promedio</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon">🏆</div>
+            <div class="kpi-value" id="kpiTopBrand">—</div>
+            <div class="kpi-label">Marca Líder</div>
+            <div class="kpi-sub" id="kpiTopBrandSub"></div>
+          </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>📦 Distribución por Marca</h3>
+            <canvas id="chartBrands"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>💵 Precio Promedio por Marca (USD)</h3>
+            <canvas id="chartPrices"></canvas>
+          </div>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="history-card">
+          <h3>🕐 Historial de Actividad</h3>
+          <ul class="history-list" id="historyList">
+            <li class="history-empty">No hay actividad registrada aún.</li>
+          </ul>
+        </div>
+
+      </div><!-- /panelDashboard -->
     </div>
   </section>
 
