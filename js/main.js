@@ -59,6 +59,7 @@ function handleForm(e) {
 
   const ok = [
     validateField('nombre',  'err-nombre',  notEmpty),
+    validateField('telefono','err-telefono', notEmpty),
     validateField('email',   'err-email',    isEmail),
     validateField('interes', 'err-interes',  notEmpty),
     validateField('mensaje', 'err-mensaje',  notEmpty),
@@ -73,6 +74,7 @@ function handleForm(e) {
 
   const templateParams = {
     nombre:   document.getElementById("nombre").value,
+    telefono: document.getElementById("telefono").value,
     email:    document.getElementById("email").value,
     servicio: document.getElementById("interes").value,
     mensaje:  document.getElementById("mensaje").value,
