@@ -39,15 +39,36 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 function handleForm(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
-  btn.textContent = '✓ Enviado — Te contactamos pronto';
-  btn.style.background = '#25D366';
-  btn.style.color = '#fff';
+  const originalText = btn.textContent;
+  
+  btn.textContent = 'Enviando...';
   btn.disabled = true;
-  setTimeout(() => {
-    btn.textContent = 'Enviar Consulta →';
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.disabled = false;
-    e.target.reset();
-  }, 4000);
+
+  const templateParams = {
+    nombre: document.getElementById("nombre").value,
+    telefono: document.getElementById("telefono").value,
+    email: document.getElementById("email").value,
+    interes: document.getElementById("interes").value,
+    mensaje: document.getElementById("mensaje").value,
+  };
+
+  emailjs.send("service_eoa40cj", "template_AutoBerlin", templateParams)
+    .then(() => {
+      btn.textContent = '✓ Enviado — Te contactamos pronto';
+      btn.style.background = '#25D366';
+      btn.style.color = '#fff';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 4000);
+    })
+    .catch((error) => {
+      console.error("EmailJS Error:", error);
+      alert("Hubo un error al enviar la consulta. Por favor, intentá de nuevo.");
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
 }
