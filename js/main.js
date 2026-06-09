@@ -127,3 +127,12 @@ function handleForm(e) {
       btn.disabled = false;
     });
 }
+
+function onInteresChange(select) {
+  const textarea = document.getElementById('mensaje');
+  if (select.value === 'stock_alert') {
+    textarea.placeholder = 'Describí el auto que buscás (marca, modelo, color, año...)';
+  } else {
+    textarea.placeholder = 'Contanos qué necesitás...';
+  }
+}

@@ -656,13 +656,13 @@
                 <span class="field-error-msg" id="err-email">Por favor ingresá un email válido.</span>
               </div>
               <div class="form-group"><label>¿Qué te interesa?</label>
-                <select id="interes">
+                <select id="interes" onchange="onInteresChange(this)">
                   <option value="">Seleccioná una opción</option>
                   <option>Consulta por un vehículo</option>
                   <option>Vender mi auto</option>
                   <option>Financiación</option>
                   <option>Consignación</option>
-                  <option value="stock_alert">📬 Avisarme cuando tengan mi auto en stock</option>
+                  <option value="stock_alert">🔔 No está en stock, avisáme</option>
                   <option>Otro</option>
                 </select>
                 <span class="field-error-msg" id="err-interes">Por favor seleccioná una opción.</span>
