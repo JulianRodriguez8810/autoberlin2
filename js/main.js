@@ -82,31 +82,30 @@ function handleForm(e) {
 
   emailjs.send("service_eoa40cj", "template_AutoBerlin", templateParams)
     .then(() => {
-      // Guardar alerta de stock si el checkbox está marcado
-      const notInStockChecked = document.getElementById('not_in_stock') && document.getElementById('not_in_stock').checked;
-      if (notInStockChecked) {
+      // Guardar en pedidos de stock si eligió esa opción
+      const interes = document.getElementById('interes').value;
+      if (interes === 'stock_alert') {
         const alertData = {
           nombre: templateParams.nombre,
           telefono: templateParams.telefono,
           email: templateParams.email,
-          interes: templateParams.servicio,
+          interes: 'Alerta de stock',
           mensaje: templateParams.mensaje,
           ts: new Date().toISOString(),
           status: 'pending'
         };
 
-        // Siempre guardar en localStorage (sirve de respaldo y también de fuente principal para el admin)
+        // Siempre guardar en localStorage
         const localAlerts = JSON.parse(localStorage.getItem('ab_pending_stock_alerts') || '[]');
-        // Limpiar demos si los hay
         const cleanedAlerts = localAlerts.filter(a => !['demo1','demo2'].includes(a.id));
         cleanedAlerts.unshift(alertData);
         localStorage.setItem('ab_pending_stock_alerts', JSON.stringify(cleanedAlerts));
 
-        // También intentar guardar en Firebase (para persistencia cloud), pero no es crítico
+        // Intentar también en Firebase
         if (typeof db !== 'undefined') {
           db.collection('stock_alerts').add(alertData)
             .then(() => console.log('Alerta de stock guardada en Firebase.'))
-            .catch(err => console.warn('Firebase rechazó la alerta (reglas), se guardó en local:', err));
+            .catch(err => console.warn('Firebase: alerta guardada solo en local.', err));
         }
       }
 
