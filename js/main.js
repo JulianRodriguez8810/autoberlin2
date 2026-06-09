@@ -48,7 +48,7 @@ function handleForm(e) {
     nombre: document.getElementById("nombre").value,
     telefono: document.getElementById("telefono").value,
     email: document.getElementById("email").value,
-    interes: document.getElementById("interes").value,
+    servicio: document.getElementById("interes").value,
     mensaje: document.getElementById("mensaje").value,
   };
 
