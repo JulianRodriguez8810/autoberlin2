@@ -302,10 +302,179 @@
       25%       { transform: translateX(-6px); }
       75%       { transform: translateX(6px); }
     }
+
+    /* ── PRIVATE ACCESS MODAL (LOGIN LOCK) ── */
+    .site-lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: rgba(5, 5, 5, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .site-lock-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .site-lock-card {
+      background: #0d0d0d;
+      border: 1px solid rgba(218, 165, 32, 0.3);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(218, 165, 32, 0.12);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .site-lock-logo {
+      height: 65px;
+      width: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 15px rgba(218, 165, 32, 0.4));
+    }
+    .site-lock-title {
+      font-family: 'Cormorant SC', serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.15em;
+      color: var(--gold, #DAA520);
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+    .site-lock-subtitle {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 1.8rem;
+    }
+    .site-lock-field {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+    .site-lock-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 0.85rem 2.8rem 0.85rem 1rem;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+    .site-lock-input:focus {
+      border-color: var(--gold, #DAA520);
+      box-shadow: 0 0 12px rgba(218, 165, 32, 0.25);
+    }
+    .site-lock-toggle-pwd {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+    }
+    .site-lock-toggle-pwd:hover {
+      color: var(--gold, #DAA520);
+    }
+    .site-lock-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #DAA520 0%, #B8860B 100%);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+    }
+    .site-lock-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(218, 165, 32, 0.45);
+    }
+    .site-lock-error {
+      color: #ff5252;
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+      display: none;
+    }
   </style>
+  <script>
+    (function() {
+      const AUTH_KEY = 'autoberlin_authenticated';
+      const PASS = 'PruebaWeb2526';
+
+      function checkAuth() {
+        const overlay = document.getElementById('siteLockOverlay');
+        if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+          if (overlay) overlay.classList.add('hidden');
+          document.body.style.overflow = '';
+        } else {
+          if (overlay) overlay.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      window.handleSiteLockSubmit = function(e) {
+        e.preventDefault();
+        const input = document.getElementById('siteLockInput');
+        const errorEl = document.getElementById('siteLockError');
+        if (input.value === PASS) {
+          sessionStorage.setItem(AUTH_KEY, 'true');
+          const overlay = document.getElementById('siteLockOverlay');
+          if (overlay) overlay.classList.add('hidden');
+          document.body.style.overflow = '';
+        } else {
+          if (errorEl) errorEl.style.display = 'block';
+          input.value = '';
+          input.focus();
+        }
+      };
+
+      window.toggleSiteLockPassword = function() {
+        const input = document.getElementById('siteLockInput');
+        if (input) {
+          input.type = input.type === 'password' ? 'text' : 'password';
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', checkAuth);
+    })();
+  </script>
 </head>
 
 <body>
+
+  <!-- SITE LOCK OVERLAY (LOGIN) -->
+  <div id="siteLockOverlay" class="site-lock-overlay">
+    <div class="site-lock-card">
+      <img src="img/logo.jpg" alt="Auto Berlin Logo" class="site-lock-logo">
+      <h2 class="site-lock-title">AUTO BERLIN</h2>
+      <p class="site-lock-subtitle">Ingrese la contraseña para acceder al sitio</p>
+      <form id="siteLockForm" onsubmit="handleSiteLockSubmit(event)">
+        <div class="site-lock-field">
+          <input type="password" id="siteLockInput" class="site-lock-input" placeholder="Contraseña..." autocomplete="current-password" required>
+          <button type="button" class="site-lock-toggle-pwd" onclick="toggleSiteLockPassword()" title="Mostrar/ocultar contraseña">👁️</button>
+        </div>
+        <button type="submit" class="site-lock-btn">Ingresar</button>
+        <div id="siteLockError" class="site-lock-error">Contraseña incorrecta. Por favor intente nuevamente.</div>
+      </form>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav id="navbar">
