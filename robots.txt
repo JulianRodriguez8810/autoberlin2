@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 
+# Content Signals for AI (RFC / ContentSignals.org)
+Content-Signal: ai-train=no, search=yes, ai-input=no
+
 # AI search retrieval (allow — these bring traffic)
 User-agent: OAI-SearchBot
 Allow: /

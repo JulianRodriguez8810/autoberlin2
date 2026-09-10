@@ -1,0 +1,21 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://autoberlin.vercel.app/api/vehicles",
+      "service-doc": [
+        {
+          "href": "https://autoberlin.vercel.app/#catalogo",
+          "type": "text/html",
+          "title": "AutoBerlin Vehicle Catalog Documentation"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://autoberlin.vercel.app/data/vehicles.json",
+          "type": "application/json",
+          "title": "AutoBerlin Public Vehicle Database API"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "serverInfo": {
+    "name": "AutoBerlin MCP Server",
+    "version": "1.0.0"
+  },
+  "description": "Model Context Protocol Server para consultar el stock de vehículos de Auto Berlin",
+  "capabilities": {
+    "tools": true,
+    "resources": true
+  },
+  "endpoints": {
+    "http": "https://autoberlin.vercel.app/data/vehicles.json"
+  }
+}

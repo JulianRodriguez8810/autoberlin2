@@ -1,0 +1,13 @@
+{"ts":"2026-08-03T20:53:20.749Z","session":"20260803-205320","kind":"server_start","data":{"port":5500,"host":"0.0.0.0","root":"e:\\Aplicaciones WEB\\AutoBerlin","https":false,"live_reload":true}}
+{"ts":"2026-08-03T20:53:21.183Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.191Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/css/style.css","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.191Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/css/animated-gradient.css","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.193Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/css/services-premium.css","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.193Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/img/logo.jpg","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.217Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/js/firebase-config.js","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.218Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/js/vehicles.js","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.219Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/js/main.js","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:21.684Z","session":"20260803-205320","kind":"ws_connect","data":{"client_id":"c0","url":"http://localhost:5500/","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36","viewport":[1920,911]}}
+{"ts":"2026-08-03T20:53:21.793Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/img/favicon.ico","status":404,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:23.545Z","session":"20260803-205320","kind":"http_request","data":{"method":"GET","path":"/data/vehicles.json","status":200,"duration_ms":0}}
+{"ts":"2026-08-03T20:53:32.787Z","session":"20260803-205320","kind":"ws_disconnect","data":{"client_id":"c0"}}

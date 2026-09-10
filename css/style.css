@@ -327,3 +327,104 @@ footer{background:var(--dark);border-top:1px solid var(--glass-border);padding:4
 .fs-indicator-bar { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); width: 150px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
 .fs-indicator-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.3s ease; }
 
+/* ── LINE SELECTOR (Business Lines) ── */
+.line-selector {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2rem 0 2.5rem;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+
+.line-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.line-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.02));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.line-btn:hover:not(.active) {
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-1px);
+}
+
+.line-btn:hover:not(.active)::before {
+  opacity: 1;
+}
+
+.line-btn.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--black);
+  border-color: var(--gold);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.3), 0 0 0 1px rgba(201,168,76,0.2);
+  transform: translateY(-1px);
+}
+
+.line-btn.active .line-tag {
+  background: rgba(0,0,0,0.2);
+  color: var(--black);
+}
+
+.line-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.line-label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.line-tag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .line-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.5rem 0 2rem;
+  }
+  .line-btn {
+    justify-content: center;
+    padding: 0.75rem 1.2rem;
+  }
+}
+

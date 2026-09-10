@@ -1,0 +1,23 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "name": "Auto Berlin",
+    "domain": "autoberlin.vercel.app",
+    "description": "Concesionaria de autos de alta gama, motos y autos del Mercosur en Canning, Buenos Aires."
+  },
+  "entries": [
+    {
+      "id": "urn:air:autoberlin.vercel.app:catalog:vehicles",
+      "displayName": "Catálogo de Vehículos AutoBerlin",
+      "type": "application/json",
+      "url": "https://autoberlin.vercel.app/data/vehicles.json",
+      "description": "API y dataset público de stock de autos de alta gama, motos y vehículos del Mercosur.",
+      "representativeQueries": [
+        "autos de alta gama en Canning",
+        "motos en stock AutoBerlin",
+        "autos Mercosur Argentina",
+        "BMW M3 en stock"
+      ]
+    }
+  ]
+}

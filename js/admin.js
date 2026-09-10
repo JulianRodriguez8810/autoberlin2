@@ -238,6 +238,7 @@ function openVehicleModal(id = null) {
       document.getElementById('v_status').value = v.status;
       document.getElementById('v_badge').value = v.badge || '';
       document.getElementById('v_date_added').value = v.dateAdded || new Date().toISOString().split('T')[0];
+      document.getElementById('v_line').value = v.line || 'autoberlin';
       currentVehicleImages = v.images ? [...v.images] : [];
       document.getElementById('v_images').value = JSON.stringify(currentVehicleImages);
     }
@@ -248,6 +249,7 @@ function openVehicleModal(id = null) {
     document.getElementById('v_currency').value = 'USD';
     document.getElementById('v_status').value = 'available';
     document.getElementById('v_date_added').value = new Date().toISOString().split('T')[0];
+    document.getElementById('v_line').value = 'autoberlin';
     currentVehicleImages = [];
     document.getElementById('v_images').value = '[]';
   }
@@ -288,6 +290,7 @@ document.getElementById('vehicleForm').addEventListener('submit', (e) => {
     status: document.getElementById('v_status').value,
     badge: document.getElementById('v_badge').value,
     dateAdded: document.getElementById('v_date_added').value || new Date().toISOString().split('T')[0],
+    line: document.getElementById('v_line').value || 'autoberlin',
     images: images
   };
 

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agentskills.io/schema/v0.2.0/skills-index.json",
+  "skills": [
+    {
+      "name": "autoberlin-vehicle-search",
+      "type": "api",
+      "description": "Permite a agentes de IA buscar y filtrar vehículos por marca, modelo, línea (autoberlin, motos, mercosur) y precio.",
+      "url": "https://autoberlin.vercel.app/data/vehicles.json"
+    }
+  ]
+}

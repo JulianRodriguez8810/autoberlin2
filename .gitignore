@@ -14,3 +14,5 @@ $RECYCLE.BIN/
 # Archivos temporales y logs
 *.log
 yt.txt
+
+.vercel
