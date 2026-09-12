@@ -417,113 +417,188 @@
     </div>
   </section>
 
-  <!-- ABOUT + SERVICES (misma sección) -->
+  <!-- ABOUT + SERVICES (misma sección integrada) -->
   <section id="nosotros">
-    <div style="padding:5rem 0;background:var(--dark);">
+    <div style="padding: 4.5rem 0; background: var(--dark); border-bottom: 1px solid rgba(218,165,32,0.15);">
       <div class="container">
-
-        <!-- Fila superior: Quiénes somos | divisor | Servicios integrales -->
-        <div style="display:grid; grid-template-columns:1fr 1px 1fr; gap:3rem; align-items:start;">
-
-          <!-- Columna izquierda: Quiénes somos -->
-          <div class="about-text fade-in">
-            <p class="section-label">Quiénes somos</p>
-            <div class="gold-line"></div>
-            <h2 class="section-title">La élite<br>automotriz de<br><span>Canning</span></h2>
-            <p>En <strong>Auto Berlin</strong> no vendemos autos, creamos experiencias. Desde hace más de una década
-              somos el destino de referencia para quienes buscan vehículos de alta gama en el sur del Gran Buenos Aires.
-            </p>
-            <p>Cada unidad de nuestro stock es seleccionada con criterio y pasión. Trabajamos con los mejores
-              fabricantes del mundo y ofrecemos un servicio personalizado que va desde la selección hasta la gestión
-              completa del trámite.</p>
-            <div class="about-features">
-              <div class="feature-item"><span class="feature-icon">🤝</span>
-                <div class="feature-text"><strong>Trato personalizado</strong><span>Asesoramiento de primer nivel</span></div>
-              </div>
-              <div class="feature-item"><span class="feature-icon">🔍</span>
-                <div class="feature-text"><strong>Stock selecto</strong><span>Solo unidades verificadas</span></div>
-              </div>
-              <div class="feature-item"><span class="feature-icon">✅</span>
-                <div class="feature-text"><strong>Garantía de 6 meses</strong><span>Por escrito</span></div>
-              </div>
-              <div class="feature-item"><span class="feature-icon">💫</span>
-                <div class="feature-text"><strong>Tratamiento cerámico</strong><span>Protección máxima</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Divisor vertical dorado -->
-          <div style="background: linear-gradient(to bottom, transparent, rgba(218,165,32,0.6) 20%, rgba(218,165,32,0.6) 80%, transparent); align-self:stretch; min-height:100%;"></div>
-
-          <!-- Columna derecha: Servicios integrales -->
-          <div id="servicios" class="fade-in">
-            <p class="section-label">Lo que hacemos</p>
-            <div class="gold-line"></div>
-            <h2 class="section-title" style="margin-bottom:2rem;">Servicios<br><span>integrales</span></h2>
-            <div class="features-grid" style="grid-template-columns: 1fr 1fr; gap:1rem;">
-              <div class="feature-card" style="--delay:0.1s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">🚗</div>
-                  <h3 class="feature-title">Compra & Venta</h3>
-                  <p class="feature-desc">Stock exclusivo de alta gama con unidades verificadas y documentación al día.</p>
-                </div>
-              </div>
-              <div class="feature-card" style="--delay:0.2s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">🔑</div>
-                  <h3 class="feature-title">Consignación</h3>
-                  <p class="feature-desc">Vendemos tu vehículo por vos. Publicación, visitas, negociación y cierre.</p>
-                </div>
-              </div>
-              <div class="feature-card" style="--delay:0.3s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">💳</div>
-                  <h3 class="feature-title">Financiación</h3>
-                  <p class="feature-desc">Planes a medida con las mejores tasas. Créditos en pesos y dólares.</p>
-                </div>
-              </div>
-              <div class="feature-card" style="--delay:0.4s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">📝</div>
-                  <h3 class="feature-title">Gestoría</h3>
-                  <p class="feature-desc">Transferencia, patentamiento, VTV y todos los trámites necesarios.</p>
-                </div>
-              </div>
-              <div class="feature-card" style="--delay:0.5s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">🛡️</div>
-                  <h3 class="feature-title">Seguros</h3>
-                  <p class="feature-desc">Las principales aseguradoras para la mejor cobertura de tu vehículo.</p>
-                </div>
-              </div>
-              <div class="feature-card" style="--delay:0.6s;">
-                <div class="feature-glow"></div>
-                <div class="feature-content">
-                  <div class="feature-icon">🔒</div>
-                  <h3 class="feature-title">Blindaje</h3>
-                  <p class="feature-desc">Blindaje con talleres de primera línea. Nivel II, III y superiores.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Responsive: en mobile apilamos las columnas -->
+        
         <style>
-          @media(max-width:768px) {
-            #nosotros > div > div:first-child {
-              grid-template-columns: 1fr !important;
+          .nosotros-servicios-grid {
+            display: grid;
+            grid-template-columns: 1fr 1px 1fr;
+            gap: 3.5rem;
+            align-items: stretch;
+          }
+          .grid-vertical-divider {
+            background: linear-gradient(to bottom, transparent, rgba(218,165,32,0.5) 15%, rgba(218,165,32,0.5) 85%, transparent);
+            width: 1px;
+          }
+          .section-head-compact {
+            margin-bottom: 1.25rem;
+          }
+          .section-head-compact .section-title {
+            font-size: clamp(2rem, 3.2vw, 2.7rem);
+            line-height: 1.15;
+            margin-bottom: 0.75rem;
+          }
+          .section-intro {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 1.75rem;
+            min-height: 4.8rem;
+          }
+          .compact-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+          }
+          .compact-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(218, 165, 32, 0.2);
+            border-radius: 12px;
+            padding: 1.1rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          }
+          .compact-card:hover {
+            border-color: rgba(218, 165, 32, 0.6);
+            background: rgba(218, 165, 32, 0.06);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(218, 165, 32, 0.15);
+          }
+          .compact-card-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 2px;
+          }
+          .compact-card-body h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+            line-height: 1.25;
+          }
+          .compact-card-body p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+            line-height: 1.35;
+          }
+
+          @media (max-width: 992px) {
+            .nosotros-servicios-grid {
+              grid-template-columns: 1fr;
+              gap: 3rem;
             }
-            #nosotros > div > div:first-child > div:nth-child(2) {
-              display: none !important;
+            .grid-vertical-divider {
+              display: none;
+            }
+            .section-intro {
+              min-height: auto;
+            }
+          }
+          @media (max-width: 576px) {
+            .compact-cards-grid {
+              grid-template-columns: 1fr;
             }
           }
         </style>
+
+        <div class="nosotros-servicios-grid">
+
+          <!-- COLUMNA IZQUIERDA: QUIÉNES SOMOS -->
+          <div class="col-nosotros fade-in">
+            <div class="section-head-compact">
+              <p class="section-label">Nosotros</p>
+              <div class="gold-line"></div>
+              <h2 class="section-title">La Élite<br><span>Automotriz</span></h2>
+            </div>
+            <p class="section-intro">
+              En <strong>Auto Berlin</strong> creamos experiencias de movilidad de élite. Más de una década seleccionando los mejores vehículos de alta gama en Canning y zona sur con total transparencia.
+            </p>
+            <div class="compact-cards-grid">
+              <div class="compact-card">
+                <div class="compact-card-icon">🤝</div>
+                <div class="compact-card-body">
+                  <h4>Trato Personalizado</h4>
+                  <p>Asesoramiento exclusivo de primer nivel</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">🔍</div>
+                <div class="compact-card-body">
+                  <h4>Stock Selecto</h4>
+                  <p>Solo unidades verificadas y certificadas</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">✅</div>
+                <div class="compact-card-body">
+                  <h4>Garantía Escrita</h4>
+                  <p>6 meses de cobertura asegurada</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">💫</div>
+                <div class="compact-card-body">
+                  <h4>Tratamiento Cerámico</h4>
+                  <p>Detailing y protección de pintura premium</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DIVISOR VERTICAL DORADO -->
+          <div class="grid-vertical-divider"></div>
+
+          <!-- COLUMNA DERECHA: SERVICIOS INTEGRALES -->
+          <div id="servicios" class="col-servicios fade-in">
+            <div class="section-head-compact">
+              <p class="section-label">Lo Que Hacemos</p>
+              <div class="gold-line"></div>
+              <h2 class="section-title">Servicios<br><span>Integrales</span></h2>
+            </div>
+            <p class="section-intro">
+              Brindamos una gestión 360° llave en mano. Nos encargamos de cada etapa: compra, consignación, financiación personalizada, gestoría completa y blindaje.
+            </p>
+            <div class="compact-cards-grid">
+              <div class="compact-card">
+                <div class="compact-card-icon">🚗</div>
+                <div class="compact-card-body">
+                  <h4>Compra & Venta</h4>
+                  <p>Stock exclusivo y compra de usados</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">🔑</div>
+                <div class="compact-card-body">
+                  <h4>Consignación</h4>
+                  <p>Publicación, exhibición y cierre de venta</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">💳</div>
+                <div class="compact-card-body">
+                  <h4>Financiación</h4>
+                  <p>Planes a medida en pesos y dólares</p>
+                </div>
+              </div>
+              <div class="compact-card">
+                <div class="compact-card-icon">📝</div>
+                <div class="compact-card-body">
+                  <h4>Gestoría & Seguros</h4>
+                  <p>Transferencias, VTV, seguros y blindaje</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
       </div>
     </div>
