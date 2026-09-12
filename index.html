@@ -251,6 +251,56 @@
       opacity: 0.6;
     }
 
+    /* ── HERO LINE SELECTOR - ULTRA PREMIUM RECTANGULAR ── */
+    .hero-line-selector {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+      background: rgba(5, 5, 5, 0.75);
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(218, 165, 32, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .hero-line-selector .line-btn {
+      position: relative;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(218, 165, 32, 0.2);
+      border-radius: 2px;
+      padding: 0.7rem 1.4rem;
+      font-family: 'Cormorant SC', 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
+    }
+    .hero-line-selector .line-btn:hover {
+      color: #ffffff;
+      border-color: rgba(218, 165, 32, 0.65);
+      background: rgba(218, 165, 32, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(218, 165, 32, 0.25);
+    }
+    .hero-line-selector .line-btn.active {
+      color: #050505;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFF1B0 0%, #DAA520 50%, #A67C1E 100%);
+      border-color: #DAA520;
+      box-shadow: 0 4px 22px rgba(218, 165, 32, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+    .hero-line-selector .line-btn span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     /* EFECTO HOVER EN GALERÍA DE VEHÍCULOS */
     .vehicle-card {
       position: relative;
@@ -350,15 +400,15 @@
     <div class="container">
       <div class="hero-content fade-in">
         <!-- Identidad de marca y Selector de Líneas en Hero -->
-        <div class="hero-line-selector" id="heroLineSelector" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 50px; border: 1px solid rgba(201,168,76,0.3); backdrop-filter: blur(10px);">
-          <button class="line-btn active" data-line="autoberlin" onclick="switchLine('autoberlin')" style="border-radius: 40px; padding: 0.5rem 1.2rem; font-size: 0.8rem;">
-            <span>🏎️ Auto Berlin</span>
+        <div class="hero-line-selector" id="heroLineSelector">
+          <button class="line-btn active" data-line="autoberlin" onclick="switchLine('autoberlin')">
+            <span>🏎️ AUTO BERLIN</span>
           </button>
-          <button class="line-btn" data-line="motos" onclick="switchLine('motos')" style="border-radius: 40px; padding: 0.5rem 1.2rem; font-size: 0.8rem;">
-            <span>🏍️ Berlin Motos</span>
+          <button class="line-btn" data-line="motos" onclick="switchLine('motos')">
+            <span>🏍️ BERLIN MOTOS</span>
           </button>
-          <button class="line-btn" data-line="mercosur" onclick="switchLine('mercosur')" style="border-radius: 40px; padding: 0.5rem 1.2rem; font-size: 0.8rem;">
-            <span>🚗 Berlin Mercosur</span>
+          <button class="line-btn" data-line="mercosur" onclick="switchLine('mercosur')">
+            <span>🚗 BERLIN MERCOSUR</span>
           </button>
         </div>
         <span class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">
