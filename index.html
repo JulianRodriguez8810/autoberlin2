@@ -253,38 +253,45 @@
 
     /* ── HERO LINE SELECTOR - ULTRA PREMIUM RECTANGULAR ── */
     .hero-line-selector {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 0.75rem;
       margin-bottom: 2rem;
-      background: rgba(5, 5, 5, 0.75);
-      padding: 6px;
-      border-radius: 4px;
-      border: 1px solid rgba(218, 165, 32, 0.35);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      background: transparent !important;
+      padding: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
     .hero-line-selector .line-btn {
       position: relative;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(218, 165, 32, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 10, 10, 0.7);
+      border: 1px solid rgba(218, 165, 32, 0.35);
       border-radius: 2px;
       padding: 0.7rem 1.4rem;
       font-family: 'Cormorant SC', 'Inter', sans-serif;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.85);
       cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
+      white-space: nowrap;
+      height: 42px;
     }
     .hero-line-selector .line-btn:hover {
       color: #ffffff;
-      border-color: rgba(218, 165, 32, 0.65);
-      background: rgba(218, 165, 32, 0.12);
+      border-color: rgba(218, 165, 32, 0.75);
+      background: rgba(218, 165, 32, 0.15);
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(218, 165, 32, 0.25);
     }
@@ -298,7 +305,33 @@
     .hero-line-selector .line-btn span {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero-line-selector {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+      }
+      .hero-line-selector .line-btn {
+        padding: 0.55rem 0.95rem;
+        font-size: 0.78rem;
+        height: 38px;
+        letter-spacing: 0.08em;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-line-selector {
+        gap: 0.35rem;
+      }
+      .hero-line-selector .line-btn {
+        padding: 0.5rem 0.65rem;
+        font-size: 0.71rem;
+        height: 36px;
+        letter-spacing: 0.05em;
+      }
     }
 
     /* EFECTO HOVER EN GALERÍA DE VEHÍCULOS */
